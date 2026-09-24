@@ -297,15 +297,18 @@
 .app {
   display: flex;
   overflow: hidden;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.11);
   border-radius: 20px;
-  background: var(--surface);
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+  background: #111116;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 50px 120px rgba(0, 0, 0, 0.65);
 }
 
 .sidebar {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 8px;
   padding: 16px 12px;
   border-right: 1px solid var(--line-soft);
@@ -356,6 +359,7 @@
 }
 
 .appBell {
+  position: relative;
   display: grid;
   place-items: center;
   width: 34px;
@@ -372,14 +376,15 @@
 }
 
 .stat {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
   padding: 14px 16px;
-  border: 1px solid var(--line-soft);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  background: var(--card);
+  background: #19191e;
 }
 
 .statLabel {
@@ -420,9 +425,9 @@
   gap: 12px;
   min-width: 0;
   padding: 14px 16px;
-  border: 1px solid var(--line-soft);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 14px;
-  background: var(--card);
+  background: #19191e;
   text-align: left;
 }
 
@@ -483,7 +488,7 @@
 }
 
 .gridLine {
-  stroke: var(--line-soft);
+  stroke: rgba(255, 255, 255, 0.08);
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
@@ -491,7 +496,7 @@
 .line {
   fill: none;
   stroke: var(--brand);
-  stroke-width: 2.5;
+  stroke-width: 3;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
@@ -1276,7 +1281,7 @@
 }
 
 .chartWrap[data-shown] .area {
-  opacity: 0.12;
+  opacity: 0.2;
 }
 
 .live {
@@ -1402,9 +1407,10 @@
   }
 }
 
+/* Four copies in the track: -25% is exactly one copy, so the reset is invisible */
 @keyframes marquee {
   to {
-    transform: translateX(-50%);
+    transform: translateX(-25%);
   }
 }
 
@@ -1428,7 +1434,7 @@
   }
 
   .area {
-    opacity: 0.12;
+    opacity: 0.2;
     transition: none;
   }
 
@@ -1447,12 +1453,34 @@
   isolation: isolate;
 }
 
+.heroBand {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Liquid blurple and pink blobs under the dots: very faint, softened, same fade */
+.heroBlobs {
+  position: absolute;
+  top: -80px;
+  left: 0;
+  z-index: -2;
+  width: 100%;
+  height: calc(100% + 80px);
+  opacity: 0.16;
+  filter: blur(56px);
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent);
+  mask-image: linear-gradient(to bottom, #000 60%, transparent);
+}
+
+/* Behind the hero and the product shot (and up under the nav), fading out
+   only at the bottom */
 .heroField {
   top: -80px;
   z-index: -1;
   height: calc(100% + 80px);
-  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 50% 45%, transparent 30%, #000 85%);
-  mask-image: radial-gradient(ellipse 70% 80% at 50% 45%, transparent 30%, #000 85%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
 }
 
 /* ---- Feature illustrations ---- */
@@ -1517,5 +1545,337 @@
 @container (max-width: 600px) {
   .demoTag {
     display: none;
+  }
+}
+
+/* ---- Dashboard: tilted back, as if looking up at a screen ---- */
+
+.appWrap {
+  perspective: 1600px;
+}
+
+.tilt {
+  position: relative;
+  transform: rotateX(12deg);
+  transform-origin: 50% 100%;
+  transition: transform 1400ms cubic-bezier(0.22, 1, 0.36, 1) 700ms;
+}
+
+/* It settles into the lean as it slides in */
+.appWrap:not([data-shown]) .tilt {
+  transform: rotateX(26deg);
+}
+
+/* ---- Dashboard detail ---- */
+
+.sideLogo {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  background: var(--brand);
+  color: #fff;
+}
+
+.sideAvatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-top: auto;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--brand) 25%, #1c1c21);
+  color: color-mix(in srgb, var(--brand) 60%, white);
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.search,
+.range {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: #19191e;
+  color: var(--faint);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.search {
+  min-width: 160px;
+}
+
+.kbd {
+  margin-left: auto;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--muted);
+  font: 600 10.5px system-ui, sans-serif;
+}
+
+.range {
+  color: #d4d4d8;
+}
+
+.bellDot {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #19191e;
+  border-radius: 50%;
+  background: var(--brand);
+  box-sizing: content-box;
+}
+
+.statFoot {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.vs {
+  color: var(--faint);
+  font-size: 11.5px;
+}
+
+.sparkUp,
+.sparkDown {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 64px;
+  height: 24px;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sparkUp {
+  stroke: #4ade80;
+}
+
+.sparkDown {
+  stroke: #f87171;
+}
+
+.forecast {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  opacity: 0.55;
+  vector-effect: non-scaling-stroke;
+}
+
+.axis {
+  position: absolute;
+  left: 0;
+  color: var(--faint);
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+  transform: translateY(-120%);
+  pointer-events: none;
+}
+
+.nowDot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border: 2px solid #19191e;
+  border-radius: 50%;
+  background: var(--brand);
+  transform: translate(-50%, -50%);
+  animation: nowPulse 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.txRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  margin-left: auto;
+}
+
+.txRight .txIn,
+.txRight .txOut {
+  margin-left: 0;
+}
+
+.txMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--faint);
+  font-size: 11px;
+}
+
+.matched {
+  color: #4ade80;
+}
+
+.minis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mini {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: #19191e;
+  text-align: left;
+}
+
+.miniHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.miniValue {
+  font-size: 20px;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.meter {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.meterFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand);
+}
+
+.segments {
+  display: flex;
+  gap: 3px;
+}
+
+.segments i {
+  flex: 1;
+  height: 8px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.segments .segOn {
+  background: #4ade80;
+}
+
+@keyframes nowPulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--brand) 60%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+@container (max-width: 860px) {
+  .search,
+  .range {
+    display: none;
+  }
+}
+
+@container (max-width: 600px) {
+  .tilt {
+    transform: rotateX(6deg);
+  }
+
+  .minis {
+    grid-template-columns: 1fr;
+  }
+
+  .sparkUp,
+  .sparkDown {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tilt {
+    transition: none;
+  }
+
+  .appWrap:not([data-shown]) .tilt {
+    transform: rotateX(12deg);
+  }
+
+  .nowDot {
+    animation: none;
+  }
+}
+
+/* ---- Headline: "Bookkeeping" ---- */
+
+/* Each letter carries its own slice of one gradient that spans the word
+   (11 letters: the gradient is 11× a letter wide, each letter offset by its
+   index), so the colour reads as one continuous flow across the word. The
+   whole gradient drifts by one full period, so the loop is seamless. */
+.waveLetter {
+  display: inline-block;
+  /* The gradient only paints inside the box, so give descenders (g, p) room
+     below the line, and take it back with a negative margin */
+  padding: 0.04em 0 0.2em;
+  margin: -0.04em 0 -0.2em;
+  background: linear-gradient(90deg, #7984f5, #c456dd, #eb459e, #c456dd, #7984f5);
+  background-size: 1100% 100%;
+  background-position: calc(var(--i) * 10%) 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation:
+    letterWave 6.5s ease-in-out calc(1.8s + var(--i) * 65ms) infinite,
+    flow 10s linear infinite;
+}
+
+/* A wave passes through: each letter lifts and brightens, then settles */
+@keyframes letterWave {
+  0%,
+  12%,
+  100% {
+    transform: none;
+    filter: none;
+  }
+  5% {
+    transform: translateY(-0.08em);
+    filter: brightness(1.45);
+  }
+}
+
+@keyframes flow {
+  to {
+    background-position: calc(var(--i) * 10% - 110%) 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .waveLetter {
+    animation: none;
   }
 }

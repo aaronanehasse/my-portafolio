@@ -1,15 +1,36 @@
 import { useState } from 'react'
-import { ArrowRight, Clock, ExternalLink, Globe, Maximize2, PenTool } from 'lucide-react'
-import { Button, Reveal, Tag } from '../../components'
+import { ArrowRight, BadgeCheck, Clock, ExternalLink, Globe, Maximize2, PenTool } from 'lucide-react'
+import { Button, Card, Reveal, Tag } from '../../components'
 import SiteLayout from '../../layout/SiteLayout.jsx'
 import LumenOverlay from './LumenOverlay.jsx'
+import PreviewRequest from './PreviewRequest.jsx'
+import { BuildArt, DecideArt, RequestArt } from './previewArt.jsx'
 import SiteDemo from './SiteDemo.jsx'
 import styles from './WebsitesPage.module.css'
 
 const facts = [
+  { Icon: BadgeCheck, text: 'Free preview first, pay only if you continue' },
   { Icon: Clock, text: 'Live in as little as 48 hours' },
   { Icon: PenTool, text: 'Every page designed, nothing templated' },
   { Icon: Globe, text: 'Domain, hosting and maintenance available' },
+]
+
+const steps = [
+  {
+    title: 'Request a preview',
+    text: 'Tell me about your business and what the site should do. It takes a couple of minutes.',
+    Art: RequestArt,
+  },
+  {
+    title: 'I build it within hours',
+    text: 'Once I accept your request, you get a real preview with 2–3 sections, usually within a few hours.',
+    Art: BuildArt,
+  },
+  {
+    title: 'You decide',
+    text: 'Like it? We carry on and build the full site. Not for you? You walk away and pay nothing.',
+    Art: DecideArt,
+  },
 ]
 
 /** /services/websites: the full website creation service. */
@@ -38,8 +59,8 @@ export default function WebsitesPage() {
               ))}
             </ul>
             <div className={styles.actions}>
-              <Button size="l" href="/#contact">
-                Get a quote <ArrowRight size={18} aria-hidden="true" />
+              <Button size="l" href="#request">
+                Request a free preview <ArrowRight size={18} aria-hidden="true" />
               </Button>
               <Button variant="secondary" size="l" href="/#projects">
                 See my work
@@ -63,6 +84,40 @@ export default function WebsitesPage() {
           </div>
         </section>
       </Reveal>
+
+      <Reveal id="free-preview" minHeight={560}>
+        <section className={styles.preview} aria-labelledby="preview-title">
+          <div className={styles.previewHead}>
+            <Tag variant="accent">Free preview · No commitment</Tag>
+            <h2 id="preview-title" className={styles.sectionTitle}>
+              See your website before you spend a thing.
+            </h2>
+            <p className={styles.intro}>
+              I’ll build a preview of your site for free. If it’s not what you want, there’s nothing to pay and
+              nothing to cancel.
+            </p>
+          </div>
+          <ol className={styles.steps}>
+            {steps.map(({ title, text, Art }, i) => (
+              <li key={title}>
+                <Card as="article" className={styles.step}>
+                  <div className={styles.stepArt}>
+                    <Art />
+                  </div>
+                  <Tag>{String(i + 1).padStart(2, '0')}</Tag>
+                  <h3 className={styles.stepTitle}>{title}</h3>
+                  <p className={styles.stepText}>{text}</p>
+                </Card>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </Reveal>
+
+      <Reveal id="request" minHeight={640}>
+        <PreviewRequest />
+      </Reveal>
+
       <LumenOverlay open={demoOpen} onClose={() => setDemoOpen(false)} />
     </SiteLayout>
   )

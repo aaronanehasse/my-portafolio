@@ -1,0 +1,118 @@
+.request {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  align-items: start;
+  gap: 56px;
+  scroll-margin-top: 96px;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 96px;
+}
+
+.title {
+  font-size: clamp(28px, 4.5vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.intro {
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.promises {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.promises li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.check {
+  flex: none;
+  margin-top: 1px;
+  color: var(--accent);
+}
+
+.card {
+  width: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.fine {
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.done {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+}
+
+.doneIcon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--tint-strong);
+  color: var(--accent);
+}
+
+.doneTitle {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 900px) {
+  .request {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .side {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

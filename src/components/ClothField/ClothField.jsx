@@ -14,6 +14,10 @@ import styles from './ClothField.module.css'
  * than simulated, so each drop gives exactly one clean ring with no trailing
  * ripples behind it.
  *
+ * Optionally, `symbols` (e.g. '$€£¥') form out of the grid now and then: a
+ * patch of squares lights up in the glow colour in the shape of a character,
+ * dot by dot in a loose order so it seems to generate, holds, then dissolves.
+ *
  * Fills its positioned parent by default; pass `className` to place, size or
  * mask it differently (the canvas needs explicit width/height, not just inset).
  *
@@ -26,6 +30,9 @@ import styles from './ClothField.module.css'
  * @param {number} [speed]    px per second the ring travels
  * @param {string} [glow]     colour squares pick up as the ring moves them: hex,
  *        or a custom property name like '--accent'; '' turns the glow off
+ * @param {string} [symbols]  characters that occasionally form out of the grid, e.g. '$€£¥'
+ * @param {number} [symbolEvery] average seconds between one symbol and the next
+ * @param {boolean} [symbolsAvoidCenter] keep symbols to the outer thirds, clear of centred content
  */
 
 const PUSH = 7 // px a square is pushed at full strength
@@ -33,7 +40,48 @@ const BAND = 46 // px, width of the ring
 const GLOW_FROM = 0.15 // share of the full push a square must move before it glows
 const FRAME = 1000 / 60
 
+const GLYPH_COLS = 15 // a symbol is drawn on this many squares across…
+const GLYPH_ROWS = 19 // …and this many down
+const GLYPH_LIFE = 3.4 // seconds from first dot to last one gone
+const GLYPH_IN = 0.9
+const GLYPH_OUT = 1.1
+
 const rand = (a, b) => a + Math.random() * (b - a)
+const smooth = (k) => k * k * (3 - 2 * k)
+const clamp01 = (v) => Math.min(1, Math.max(0, v))
+
+/**
+ * Which squares a character covers, and how much of each: draw it large on a
+ * scratch canvas and average the ink in every cell. Coverage becomes the dot's
+ * opacity, so the shape keeps soft, defined edges instead of a hard stair-step.
+ * Each cell also gets a random 0–1 to stagger when it lights up and goes out.
+ */
+function glyphCells(ch) {
+  const S = 12
+  const c = document.createElement('canvas')
+  c.width = GLYPH_COLS * S
+  c.height = GLYPH_ROWS * S
+  const g = c.getContext('2d')
+  if (!g) return []
+  g.fillStyle = '#fff'
+  g.textAlign = 'center'
+  g.textBaseline = 'middle'
+  g.font = `700 ${Math.round(GLYPH_ROWS * S * 0.95)}px system-ui, sans-serif`
+  g.fillText(ch, c.width / 2, c.height / 2 + S * 0.4)
+  const data = g.getImageData(0, 0, c.width, c.height).data
+  const cells = []
+  for (let row = 0; row < GLYPH_ROWS; row++) {
+    for (let col = 0; col < GLYPH_COLS; col++) {
+      let ink = 0
+      for (let y = row * S; y < (row + 1) * S; y++) {
+        for (let x = col * S; x < (col + 1) * S; x++) ink += data[(y * c.width + x) * 4 + 3]
+      }
+      const coverage = ink / (S * S * 255)
+      if (coverage > 0.12) cells.push([col, row, Math.random(), Math.min(1, coverage * 1.4)])
+    }
+  }
+  return cells
+}
 
 export default function ClothField({
   gap = 20,
@@ -44,6 +92,9 @@ export default function ClothField({
   reach = 520,
   speed = 240,
   glow = '--accent',
+  symbols = '',
+  symbolEvery = 3,
+  symbolsAvoidCenter = false,
   className,
 }) {
   const canvasRef = useRef(null)
@@ -65,6 +116,9 @@ export default function ClothField({
     let rows = 0
     let ring = null // { x, y, age } — the one ring currently travelling
     let calm = 0.2 // seconds until the next drop
+    const masks = Array.from(symbols).map(glyphCells).filter((m) => m.length)
+    let glyphs = [] // { cells, col, row, age }
+    let nextGlyph = rand(0.8, symbolEvery)
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -115,6 +169,29 @@ export default function ClothField({
         }
       }
 
+      // Symbols forming out of the grid, riding any ring that passes through
+      if (glyphs.length && glowFill) {
+        ctx.fillStyle = glowFill
+        for (const gl of glyphs) {
+          for (const [cx, cy, seed, cover] of gl.cells) {
+            const on = clamp01((gl.age - seed * 0.5) / (GLYPH_IN * 0.6))
+            const off = clamp01((GLYPH_LIFE - gl.age - seed * 0.35) / GLYPH_OUT)
+            const a = smooth(Math.min(on, off))
+            if (a <= 0.01) continue
+            // A slow band of brightness runs down the symbol while it's up
+            const shimmer = 0.72 + 0.28 * Math.sin(gl.age * 3.2 - cy * 0.55)
+            const px = (gl.col + cx) * gap
+            const py = (gl.row + cy) * gap
+            const p = pushAt(px, py)
+            // The fullest dots are drawn a touch bigger, so the shape reads solid
+            const d = cover > 0.85 ? size + 1.5 : size
+            ctx.globalAlpha = a * (0.25 + 0.75 * cover) * shimmer
+            ctx.fillRect(px + (p ? p.ox : 0) - d / 2, py + (p ? p.oy : 0) - d / 2, d, d)
+          }
+        }
+        ctx.globalAlpha = 1
+      }
+
       if (!glowFill || !lit.length) return
       // A faint tint on the squares the ring is moving — kept low so the
       // movement, not the colour, carries the effect
@@ -160,6 +237,27 @@ export default function ClothField({
         if (calm <= 0) ring = { x: rand(0, w), y: rand(0, h), age: 0 }
       }
 
+      if (masks.length) {
+        for (const gl of glyphs) gl.age += dt
+        glyphs = glyphs.filter((gl) => gl.age < GLYPH_LIFE + 0.5)
+        nextGlyph -= dt
+        if (nextGlyph <= 0 && glyphs.length < 2) {
+          nextGlyph = rand(symbolEvery * 0.6, symbolEvery * 1.4)
+          // A free spot: inside the grid, clear of other symbols (and of the
+          // middle third, if asked)
+          for (let tries = 0; tries < 12; tries++) {
+            const col = Math.floor(rand(1, cols - GLYPH_COLS - 1))
+            const row = Math.floor(rand(1, rows - GLYPH_ROWS - 1))
+            const mid = ((col + GLYPH_COLS / 2) * gap) / w
+            if (symbolsAvoidCenter && mid > 0.3 && mid < 0.7) continue
+            if (glyphs.some((gl) => Math.abs(gl.col - col) < GLYPH_COLS + 2 && Math.abs(gl.row - row) < GLYPH_ROWS + 2)) continue
+            const cells = masks[Math.floor(Math.random() * masks.length)]
+            glyphs.push({ cells, col, row, age: 0 })
+            break
+          }
+        }
+      }
+
       draw()
     }
     const play = () => {
@@ -183,7 +281,7 @@ export default function ClothField({
       ro.disconnect()
       document.removeEventListener('visibilitychange', onVis)
     }
-  }, [gap, size, color, every, strength, reach, speed, glow])
+  }, [gap, size, color, every, strength, reach, speed, glow, symbols, symbolEvery, symbolsAvoidCenter])
 
   return (
     <canvas

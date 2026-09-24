@@ -15,6 +15,7 @@ import {
   Menu,
   MessageSquare,
   Plug,
+  Search,
   Settings,
   ShoppingBag,
   Sparkles,
@@ -25,6 +26,7 @@ import {
 import { ClothField, DeckEmbers, RippleField } from '../../components'
 import { actionAt, bell, easeOutCubic, loopLength, seg, track, useTimeline } from '../../lib/motion.js'
 import { CashflowArt, CategoriseArt, CloseArt, PipelineArt, SecurityArt } from './art.jsx'
+import LumenBlobs from './LumenBlobs.jsx'
 import styles from './LumenSite.module.css'
 
 /*
@@ -76,10 +78,10 @@ const PERIODS = {
 }
 
 const TRANSACTIONS = [
-  { name: 'Stripe payout', category: 'Revenue', amount: '+$3,240.00', inflow: true },
-  { name: 'AWS', category: 'Software', amount: '−$412.18' },
-  { name: 'Gusto payroll', category: 'Payroll', amount: '−$18,400.00' },
-  { name: 'Figma', category: 'Software', amount: '−$45.00' },
+  { name: 'Stripe payout', category: 'Revenue', amount: '+$3,240.00', inflow: true, time: '12m ago' },
+  { name: 'AWS', category: 'Software', amount: '−$412.18', time: '48m ago' },
+  { name: 'Gusto payroll', category: 'Payroll', amount: '−$18,400.00', time: '2h ago' },
+  { name: 'Figma', category: 'Software', amount: '−$45.00', time: '3h ago' },
 ]
 
 // New transactions that arrive in the live feed, round-robin
@@ -248,14 +250,18 @@ function Chart({ period, demoHover = null, boxRef }) {
   const w = 600
   const h = 180
   const max = 90
-  const pts = data.map((v, i) => [(i / (data.length - 1)) * w, h - (v / max) * h])
+  // Real data fills the first 86%; the rest is a dashed forecast
+  const pts = data.map((v, i) => [(i / (data.length - 1)) * w * CHART_REAL, h - (v / max) * h])
   const line = `M${pts.map((p) => p.join(' ')).join(' L')}`
-  const area = `${line} L${w} ${h} L0 ${h}Z`
+  const area = `${line} L${pts[pts.length - 1][0]} ${h} L0 ${h}Z`
+  const last = pts[pts.length - 1]
+  const slope = (data[data.length - 1] - data[data.length - 4]) / 3
+  const forecast = `M${last.join(' ')} L${w} ${h - (Math.min(max, data[data.length - 1] + slope * 2) / max) * h}`
 
   const onMove = (e) => {
     const r = e.currentTarget.getBoundingClientRect()
-    const i = Math.round(((e.clientX - r.left) / r.width) * (data.length - 1))
-    setHover(Math.max(0, Math.min(data.length - 1, i)))
+    const f = (e.clientX - r.left) / r.width / CHART_REAL
+    setHover(Math.max(0, Math.min(data.length - 1, Math.round(f * (data.length - 1)))))
   }
 
   return (
@@ -265,11 +271,20 @@ function Chart({ period, demoHover = null, boxRef }) {
           <line key={y} x1="0" x2={w} y1={h * y} y2={h * y} className={styles.gridLine} />
         ))}
         <path d={area} className={styles.area} />
+        <path d={forecast} className={styles.forecast} />
         <path d={line} className={styles.line} pathLength="1" />
         {hover !== null && (
           <line x1={pts[hover][0]} x2={pts[hover][0]} y1="0" y2={h} className={styles.hoverLine} />
         )}
       </svg>
+      {/* Axis values, over the grid lines */}
+      {[0.25, 0.5, 0.75].map((y) => (
+        <span key={y} className={styles.axis} style={{ top: `${y * 100}%` }}>
+          ${Math.round((max * (1 - y) * 588) / 1000)}k
+        </span>
+      ))}
+      {/* Today, pulsing at the end of the line */}
+      <span className={styles.nowDot} style={{ left: `${(last[0] / w) * 100}%`, top: `${(last[1] / h) * 100}%` }} />
       {hover !== null && (
         <span
           className={styles.tooltip}
@@ -284,6 +299,24 @@ function Chart({ period, demoHover = null, boxRef }) {
         ))}
       </div>
     </div>
+  )
+}
+
+const CHART_REAL = 0.86
+
+// Small trend lines for the stat cards (0–1)
+const SPARKS = {
+  Revenue: [0.3, 0.42, 0.36, 0.55, 0.5, 0.68, 0.62, 0.8, 0.92],
+  Expenses: [0.7, 0.62, 0.66, 0.5, 0.56, 0.44, 0.48, 0.4, 0.36],
+  'Cash on hand': [0.4, 0.45, 0.5, 0.48, 0.58, 0.62, 0.66, 0.74, 0.82],
+}
+
+function Sparkline({ points, up }) {
+  const d = points.map((v, i) => `${(i / (points.length - 1)) * 64},${22 - v * 20}`).join(' ')
+  return (
+    <svg className={up ? styles.sparkUp : styles.sparkDown} viewBox="0 0 64 24" aria-hidden="true">
+      <polyline points={d} />
+    </svg>
   )
 }
 
@@ -312,14 +345,20 @@ function Dashboard() {
     const app = ref.current
     if (!app) return undefined
     const ro = new ResizeObserver(() => {
-      const a = app.getBoundingClientRect()
+      // Layout offsets rather than screen rects: the dashboard is tilted in
+      // 3D, and the cursor lives inside it, in its untilted coordinates
       const rel = (el) => {
-        const b = el.getBoundingClientRect()
-        return { x: b.left - a.left, y: b.top - a.top, w: b.width, h: b.height }
+        let x = 0
+        let y = 0
+        for (let n = el; n && n !== app; n = n.offsetParent) {
+          x += n.offsetLeft
+          y += n.offsetTop
+        }
+        return { x, y, w: el.offsetWidth, h: el.offsetHeight }
       }
       setGeo({
-        w: a.width,
-        h: a.height,
+        w: app.offsetWidth,
+        h: app.offsetHeight,
         tabs: tabRefs.current.map((el) => {
           const b = rel(el)
           return [b.x + b.w / 2, b.y + b.h / 2]
@@ -357,7 +396,7 @@ function Dashboard() {
         const a = pts[Math.floor(f)]
         const b = pts[Math.min(pts.length - 1, Math.floor(f) + 1)]
         const v = a + (b - a) * (f - Math.floor(f))
-        return [c.x + k * c.w, c.y + 180 - (v / 90) * 180]
+        return [c.x + k * c.w * CHART_REAL, c.y + 180 - (v / 90) * 180]
       }
       const start = onLine(0.02)
       const end = onLine(0.98)
@@ -407,11 +446,15 @@ function Dashboard() {
       onPointerLeave={() => setUser(false)}
     >
       <aside className={styles.sidebar} aria-label="App navigation">
+        <span className={styles.sideLogo}>
+          <Layers size={15} strokeWidth={2.5} />
+        </span>
         {[Home, BarChart3, Wallet, FileText, Settings].map((Icon, i) => (
           <span key={i} className={i === 1 ? styles.sideOn : styles.sideItem}>
             <Icon size={16} />
           </span>
         ))}
+        <span className={styles.sideAvatar}>PR</span>
       </aside>
       <div className={styles.appMain}>
         <div className={styles.appTop}>
@@ -423,8 +466,15 @@ function Dashboard() {
             <span className={demo ? styles.demoTag : `${styles.demoTag} ${styles.demoTagHidden}`}>
               Auto demo · hover to try it
             </span>
+            <span className={styles.search}>
+              <Search size={13} />
+              Search
+              <kbd className={styles.kbd}>⌘K</kbd>
+            </span>
+            <span className={styles.range}>Sep 1 – 30</span>
             <span className={styles.appBell}>
               <Bell size={16} />
+              <i className={styles.bellDot} />
             </span>
           </span>
         </div>
@@ -439,7 +489,11 @@ function Dashboard() {
               <span className={styles.statValue}>
                 <CountUp value={value} prefix="$" />
               </span>
-              <span className={up ? styles.up : styles.down}>{delta}</span>
+              <span className={styles.statFoot}>
+                <span className={up ? styles.up : styles.down}>{delta}</span>
+                <span className={styles.vs}>vs last month</span>
+              </span>
+              <Sparkline points={SPARKS[label]} up={label !== 'Expenses'} />
             </div>
           ))}
         </div>
@@ -483,10 +537,40 @@ function Dashboard() {
                     <span className={styles.txName}>{x.name}</span>
                     <span className={styles.txCat}>{x.category}</span>
                   </span>
-                  <span className={x.inflow ? styles.txIn : styles.txOut}>{x.amount}</span>
+                  <span className={styles.txRight}>
+                    <span className={x.inflow ? styles.txIn : styles.txOut}>{x.amount}</span>
+                    <span className={styles.txMeta}>
+                      {x.fresh ? 'just now' : x.time ?? '1h ago'}
+                      {!x.inflow && <Check size={11} strokeWidth={3} className={styles.matched} aria-label="Receipt matched" />}
+                    </span>
+                  </span>
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+        <div className={styles.minis}>
+          <div className={styles.mini}>
+            <div className={styles.miniHead}>
+              <span>Tax reserve</span>
+              <span className={styles.hint}>72% of Q3</span>
+            </div>
+            <span className={styles.miniValue}>$21,480</span>
+            <span className={styles.meter}>
+              <span className={styles.meterFill} style={{ width: '72%' }} />
+            </span>
+          </div>
+          <div className={styles.mini}>
+            <div className={styles.miniHead}>
+              <span>Runway</span>
+              <span className={styles.hint}>at current burn</span>
+            </div>
+            <span className={styles.miniValue}>14.2 months</span>
+            <span className={styles.segments} aria-hidden="true">
+              {Array.from({ length: 18 }, (_, i) => (
+                <i key={i} className={i < 14 ? styles.segOn : undefined} />
+              ))}
+            </span>
           </div>
         </div>
         {demo && (
@@ -680,44 +764,71 @@ export default function LumenSite() {
         )}
       </div>
 
-      <header id="lumen-top" className={styles.hero}>
-        <ClothField className={styles.heroField} color="rgba(255, 255, 255, 0.07)" glow={BRAND} every={4} reach={460} />
-        <a className={styles.badge} href="#lumen-product" onClick={go('lumen-product')} {...rv(0)}>
-          <span className={styles.badgeNew}>New</span>
-          Lumen AI reconciles in seconds
-          <ArrowRight size={13} />
-        </a>
-        <h1 className={styles.h1}>
-          {'Bookkeeping that runs itself.'.split(' ').map((word, i) => (
-            <span key={i} className={styles.word} {...rv(120 + i * 90)}>
-              {word}{' '}
+      {/* Hero and product shot share one rippling grid, fading out below the dashboard */}
+      <div className={styles.heroBand}>
+        <LumenBlobs className={styles.heroBlobs} />
+        <ClothField
+          className={styles.heroField}
+          color="rgba(255, 255, 255, 0.05)"
+          glow={BRAND}
+          every={4}
+          reach={460}
+          symbols="$€£¥"
+          symbolEvery={2.6}
+          symbolsAvoidCenter
+        />
+        <header id="lumen-top" className={styles.hero}>
+          <a className={styles.badge} href="#lumen-product" onClick={go('lumen-product')} {...rv(0)}>
+            <span className={styles.badgeNew}>New</span>
+            Lumen AI reconciles in seconds
+            <ArrowRight size={13} />
+          </a>
+          <h1 className={styles.h1} aria-label="Bookkeeping that runs itself.">
+            {/* "Bookkeeping" in flowing blurple-to-pink; a wave lifts its letters every few seconds */}
+            <span className={styles.word} aria-hidden="true" {...rv(120)}>
+              {Array.from('Bookkeeping').map((ch, i) => (
+                <span key={i} className={styles.waveLetter} style={{ '--i': i }}>
+                  {ch}
+                </span>
+              ))}{' '}
             </span>
-          ))}
-        </h1>
-        <p className={styles.lede} {...rv(520)}>
-          Lumen connects your bank, sorts every transaction and closes your books each month, so you can get back to
-          running the business.
-        </p>
-        <div className={styles.ctas} {...rv(640)}>
-          <a className={styles.btnBrand} href="#lumen-signup" onClick={go('lumen-signup')}>
-            Start free trial <ArrowRight size={16} />
-          </a>
-          <a className={styles.btnGhost} href="#lumen-how" onClick={go('lumen-how')}>
-            See how it works
-          </a>
-        </div>
-        <p className={styles.fine} {...rv(760)}>
-          14-day free trial · No card required
-        </p>
-      </header>
+            {['that', 'runs'].map((word, i) => (
+              <span key={word} className={styles.word} aria-hidden="true" {...rv(210 + i * 90)}>
+                {word}{' '}
+              </span>
+            ))}
+            <span className={styles.word} aria-hidden="true" {...rv(390)}>
+              itself.
+            </span>
+          </h1>
+          <p className={styles.lede} {...rv(520)}>
+            Lumen connects your bank, sorts every transaction and closes your books each month, so you can get back to
+            running the business.
+          </p>
+          <div className={styles.ctas} {...rv(640)}>
+            <a className={styles.btnBrand} href="#lumen-signup" onClick={go('lumen-signup')}>
+              Start free trial <ArrowRight size={16} />
+            </a>
+            <a className={styles.btnGhost} href="#lumen-how" onClick={go('lumen-how')}>
+              See how it works
+            </a>
+          </div>
+          <p className={styles.fine} {...rv(760)}>
+            14-day free trial · No card required
+          </p>
+        </header>
 
-      <section className={styles.product} aria-label="Product preview">
-        <div className={styles.appWrap} {...rv(820)}>
-          {/* Sparks shed off the dashboard's rim; measures the dashboard, its next sibling */}
-          <DeckEmbers color={BRAND} radius={20} pad={48} rate={4} />
-          <Dashboard />
-        </div>
+        <section className={styles.product} aria-label="Product preview">
+          <div className={styles.appWrap} {...rv(820)}>
+            {/* Sparks shed off the dashboard's rim; measures the dashboard, its next sibling */}
+            {/* Leaned back, as if looking up at a screen; the sparks lean with it */}
+            <div className={styles.tilt}>
+              <DeckEmbers color={BRAND} radius={20} pad={48} rate={4} />
+              <Dashboard />
+            </div>
+      </div>
       </section>
+      </div>
 
       <section className={styles.logos} aria-label="Customers">
         <p className={styles.logosLabel} {...rv()}>
@@ -790,11 +901,13 @@ export default function LumenSite() {
           <p className={styles.logosLabel} {...rv()}>
             Works with the tools you already use
           </p>
-          {/* Endless strip: the list twice, sliding by exactly one copy */}
+          {/* Endless strip: the list four times over, sliding by exactly one copy.
+              One copy is narrower than the strip on wide screens, so the spare
+              copies keep tags coming in on the right until the seamless reset. */}
           <div className={styles.marquee} {...rv(100)}>
             <div className={styles.marqueeTrack}>
-              {[0, 1].map((copy) => (
-                <div key={copy} className={styles.integrationRow} aria-hidden={copy === 1 || undefined}>
+              {[0, 1, 2, 3].map((copy) => (
+                <div key={copy} className={styles.integrationRow} aria-hidden={copy > 0 || undefined}>
                   {INTEGRATIONS.map(({ name, Icon }) => (
                     <span key={name} className={styles.integration}>
                       <Icon size={15} /> {name}

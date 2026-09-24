@@ -1,0 +1,90 @@
+/* Fills only: motion is driven from the timelines in previewArt.jsx.
+   The portfolio's own ladder and accent. */
+
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.slab {
+  fill: var(--float);
+}
+.raise1 {
+  fill: var(--raise-1);
+}
+.raise2 {
+  fill: var(--raise-2);
+}
+.raise3 {
+  fill: var(--raise-3);
+}
+.accent {
+  fill: var(--accent);
+}
+
+.field {
+  fill: var(--raise-1);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.typed {
+  fill: var(--text-muted);
+}
+
+.fieldLabel {
+  fill: var(--text-faint);
+  font: 500 8.5px system-ui, sans-serif;
+}
+
+.btnText {
+  fill: var(--accent-ink);
+  font: 650 10px system-ui, sans-serif;
+}
+
+.secondary {
+  fill: var(--raise-2);
+}
+
+.secondaryText {
+  fill: var(--text-muted);
+  font: 600 10px system-ui, sans-serif;
+}
+
+.readout {
+  fill: var(--float);
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.readoutText {
+  fill: var(--text);
+  font: 600 10px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.clockBg {
+  fill: var(--float);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.clockRing {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.clockText {
+  fill: var(--text);
+  font: 700 9px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.cursor {
+  fill: #fff;
+  stroke: var(--page);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
