@@ -1,0 +1,25 @@
+/* Fills the card's stage: the logo centred like the other two icons, the
+   state buttons overlaid along the bottom so they don't push it off-centre */
+.playground {
+  position: absolute;
+  inset: 0;
+}
+
+.logo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.controls {
+  position: absolute;
+  right: 0;
+  bottom: 4px;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 8px;
+}

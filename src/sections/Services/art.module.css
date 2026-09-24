@@ -1,0 +1,158 @@
+/* Fills only: all motion is driven from the timelines in art.jsx */
+
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ---- Ladder surfaces, as fills ---- */
+
+.raise1 {
+  fill: var(--raise-1);
+}
+.raise2 {
+  fill: var(--raise-2);
+}
+.raise3 {
+  fill: var(--raise-3);
+}
+.accent {
+  fill: var(--accent);
+}
+.ink {
+  fill: var(--accent-ink);
+}
+.tintRect {
+  fill: var(--tint-strong);
+}
+
+/* A window or device: raise-1 with the shared hairline */
+.frame {
+  fill: var(--raise-1);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+/* Small raised items inside it */
+.tile {
+  fill: var(--raise-1);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.ripple {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.knob {
+  fill: var(--text);
+}
+
+/* ---- Websites ---- */
+
+.url {
+  fill: var(--text-faint);
+  font: 500 7px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.lockIcon {
+  color: var(--accent);
+}
+
+.pill {
+  fill: var(--tint-strong);
+}
+
+.pillIcon {
+  color: var(--accent);
+}
+
+.pillText {
+  fill: var(--accent);
+  font: 700 9px ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.livePill {
+  fill: var(--accent);
+}
+
+.liveIcon {
+  color: var(--accent-ink);
+}
+
+.liveText {
+  fill: var(--accent-ink);
+  font: 700 9px system-ui, sans-serif;
+}
+
+.scoreBg {
+  fill: var(--float);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.scoreTrack {
+  fill: none;
+  stroke: var(--raise-2);
+  stroke-width: 3;
+}
+
+.scoreRing {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+
+.scoreText {
+  fill: var(--text);
+  font: 700 10px ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Components ---- */
+
+/* Holds the live Echo, centred in its tile */
+.echoSlot {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.chip {
+  fill: var(--raise-1);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.chipActive {
+  fill: var(--tint-strong);
+}
+
+.chipText {
+  fill: var(--text-faint);
+  font: 500 8px system-ui, sans-serif;
+}
+
+.chipTextActive {
+  fill: var(--accent);
+  font: 600 8px system-ui, sans-serif;
+}
+
+/* ---- Mobile ---- */
+
+.note {
+  fill: var(--float);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.finger {
+  fill: #fff;
+}

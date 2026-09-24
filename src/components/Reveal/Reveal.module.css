@@ -1,0 +1,21 @@
+.reveal {
+  /* Clear the sticky header when an anchor scrolls here */
+  scroll-margin-top: 88px;
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms var(--ease-out),
+    transform 700ms var(--ease-out);
+}
+
+.shown {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transform: none;
+    transition: opacity 300ms linear;
+  }
+}

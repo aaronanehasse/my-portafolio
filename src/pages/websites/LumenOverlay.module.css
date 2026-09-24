@@ -1,0 +1,168 @@
+/* Full-screen, with a margin so it still reads as a window over the page */
+.dialog {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  padding: 24px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+}
+
+.dialog::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+.dialog[open] .window {
+  animation: open 280ms var(--ease-out) both;
+}
+
+.dialog[open]::backdrop {
+  animation: fade 200ms var(--ease-out) both;
+}
+
+.window {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  border-radius: var(--r-panel);
+  background: var(--slab);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 40px 120px rgba(0, 0, 0, 0.6);
+}
+
+.chrome {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 14px;
+  height: 52px;
+  padding: 0 10px 0 18px;
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+}
+
+.dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--raise-3);
+}
+
+.address {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 0;
+  height: 32px;
+  border-radius: var(--r-pill);
+  background: var(--raise-2);
+  color: var(--text-muted);
+  font: 500 13px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.address svg {
+  color: var(--accent);
+}
+
+.tool,
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 36px;
+  border: 0;
+  border-radius: var(--r-m);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--t-fade) var(--ease-out),
+    color var(--t-fade) var(--ease-out);
+}
+
+.tool {
+  padding: 0 12px;
+}
+
+.close {
+  width: 36px;
+}
+
+/* Hover is one step up the ladder */
+.tool:hover,
+.close:hover {
+  background: var(--raise-3);
+  color: var(--text);
+}
+
+.tool:focus-visible,
+.close:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* The page scrolls here, and never hands the scroll on to the page behind */
+.scroller {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 0 0 var(--r-panel) var(--r-panel);
+  background: #09090b;
+}
+
+.loading {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  color: var(--text-faint);
+  font-size: 14px;
+}
+
+@keyframes open {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .dialog {
+    padding: 8px;
+  }
+
+  .toolLabel {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog[open] .window,
+  .dialog[open]::backdrop {
+    animation: none;
+  }
+}

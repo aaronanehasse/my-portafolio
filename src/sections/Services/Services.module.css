@@ -1,0 +1,134 @@
+.services {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  scroll-margin-top: 88px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  font-size: clamp(28px, 4.5vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.intro {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grid > li {
+  display: flex;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Same height for every illustration, so titles line up across the row */
+.stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 8px;
+}
+
+.cardTitle {
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+
+.description {
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+
+.points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.check {
+  flex: none;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+/* Pinned to the bottom so the three cards end on the same line */
+.footer {
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: 13px;
+}
+
+.note {
+  color: var(--text-faint);
+}
+
+.link {
+  color: var(--accent);
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.link:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ctaText {
+  color: var(--text-muted);
+  font-size: 17px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    max-width: 480px;
+  }
+}

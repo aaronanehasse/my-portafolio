@@ -1,0 +1,23 @@
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+/* A small raised item: raise-1 plus the shared hairline */
+.default {
+  background: var(--raise-1);
+  border: var(--hairline);
+  color: var(--text-muted);
+}
+
+/* The accent as a fill — no edge, since the tone already changed */
+.accent {
+  background: var(--tint);
+  color: var(--accent);
+}

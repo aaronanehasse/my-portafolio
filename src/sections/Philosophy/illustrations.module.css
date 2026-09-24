@@ -1,0 +1,190 @@
+/* Fills only: all motion is driven from the timelines in illustrations.jsx */
+
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ---- Surfaces: the page ladder, as fills ---- */
+
+.slab {
+  fill: var(--slab);
+  /* Cut-out edge in the page colour separates overlapping windows */
+  stroke: var(--page);
+  stroke-width: 4;
+  paint-order: stroke;
+}
+.raise1 {
+  fill: var(--raise-1);
+}
+.raise2 {
+  fill: var(--raise-2);
+}
+.raise3 {
+  fill: var(--raise-3);
+}
+.accent {
+  fill: var(--accent);
+}
+.flash {
+  fill: #fff;
+}
+
+.ripple {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.cursor {
+  fill: #fff;
+  stroke: var(--page);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+/* ---- Clones ---- */
+
+.key {
+  fill: var(--raise-2);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.keyDown {
+  fill: var(--tint-strong);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.keyText {
+  fill: var(--text-muted);
+  font: 600 12px system-ui, sans-serif;
+}
+
+.counter {
+  fill: var(--tint);
+}
+
+.counterText {
+  fill: var(--accent);
+  font: 700 12px ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chart action: the trend line over the bars */
+.trend {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.arrowHead {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- Craft ---- */
+
+.readout {
+  fill: var(--float);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.readoutText {
+  fill: var(--text);
+  font: 600 8.5px ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.field {
+  fill: var(--raise-2);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+/* Being scrubbed: the accent as a fill, never a heavier edge */
+.fieldHot {
+  fill: var(--tint-strong);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.fieldLabel {
+  fill: var(--text-faint);
+  font: 500 9px system-ui, sans-serif;
+}
+
+.fieldValue {
+  fill: var(--text);
+  font: 600 9px ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.bounds {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.marquee {
+  fill: var(--tint);
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.curve {
+  fill: none;
+  stroke: var(--accent);
+  stroke-linecap: round;
+}
+
+.rubber {
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.6;
+}
+
+.handle {
+  stroke: var(--text-faint);
+  stroke-width: 1;
+}
+
+.knob {
+  fill: var(--text);
+}
+
+.anchor {
+  fill: var(--page);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.anchorActive {
+  fill: var(--accent);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.redline {
+  stroke: var(--danger-text);
+  stroke-width: 1;
+}
+
+.redTag {
+  fill: var(--danger-tint-strong);
+}
+
+.redText {
+  fill: var(--danger-text);
+  font: 600 9px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}

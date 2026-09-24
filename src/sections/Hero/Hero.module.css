@@ -1,0 +1,226 @@
+.hero {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: center;
+  align-content: center;
+  gap: 32px;
+  /* Fills the first screen below the header. The extra bottom padding lifts the
+     content above the geometric centre, which otherwise reads as sitting low. */
+  min-height: calc(100svh - var(--header-h));
+  padding-block: 24px calc(24px + 8svh);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Inverse vignette: clear in the middle, a faint accent wash towards the edges.
+   Full-bleed (100vw, up under the header) rather than the width of the page
+   column, and faded out at the bottom so it never ends in a hard line. */
+.hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--header-h) * -1);
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  translate: -50% 0;
+  background: radial-gradient(
+    ellipse 75% 85% at 50% 45%,
+    transparent 55%,
+    color-mix(in srgb, var(--accent) 4%, transparent) 78%,
+    color-mix(in srgb, var(--accent) 8%, transparent) 100%
+  );
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  pointer-events: none;
+}
+
+/* Moving cloth of dark squares, in the same full-bleed box as the vignette.
+   Masked to match it: the weave lives at the edges and leaves the middle
+   (text and photo) clean, then fades out at the bottom. */
+.field {
+  z-index: -1;
+  top: calc(var(--header-h) * -1);
+  left: 50%;
+  width: 100vw;
+  height: calc(100% + var(--header-h));
+  translate: -50% 0;
+  -webkit-mask-image:
+    radial-gradient(ellipse 75% 85% at 50% 45%, transparent 45%, #000 85%),
+    linear-gradient(to bottom, #000 70%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(ellipse 75% 85% at 50% 45%, transparent 45%, #000 85%),
+    linear-gradient(to bottom, #000 70%, transparent);
+  mask-composite: intersect;
+}
+
+/* ---- Text ---- */
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  animation: rise 320ms var(--ease-out) both;
+}
+
+.title {
+  font-size: clamp(40px, 5vw, 88px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.name {
+  color: var(--accent);
+}
+
+.role {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.intro {
+  max-width: 460px;
+  font-size: 17px;
+  color: var(--text-muted);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+/* ---- Visual ---- */
+
+.visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 0;
+  /* Shared circle size so the glow and the image mask line up */
+  container-type: inline-size;
+  --circle: min(clamp(440px, 26vw, 600px), 75cqw);
+  --circle-r: calc(var(--circle) / 2);
+}
+
+/* A soft green light behind the cutout so the transparent edges have something to sit on */
+.glow {
+  position: absolute;
+  /* Centred with margins, not a transform: DeckEmbers measures layout offsets */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin-inline: auto;
+  width: var(--circle);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 50% 60%,
+    color-mix(in srgb, var(--accent) 28%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 8%, transparent) 45%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: min(calc(100svh - var(--header-h) - 8svh - 48px), 960px);
+  object-fit: contain;
+  object-position: bottom;
+  /* Everything above the circle's centre stays visible (so the head can pop out);
+     below that, the image is clipped to the circle */
+  -webkit-mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - var(--circle-r)) no-repeat,
+    radial-gradient(circle var(--circle-r) at 50% calc(100% - var(--circle-r)), #000 99.5%, transparent 100%);
+  mask:
+    linear-gradient(#000 0 0) top / 100% calc(100% - var(--circle-r)) no-repeat,
+    radial-gradient(circle var(--circle-r) at 50% calc(100% - var(--circle-r)), #000 99.5%, transparent 100%);
+  animation: fade 280ms var(--ease-out) 80ms both;
+}
+
+.placeholder {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: min(360px, 100%);
+  height: min(460px, calc(100svh - var(--header-h) - 48px));
+  border: var(--dashed);
+  border-radius: var(--r-panel);
+  color: var(--text-faint);
+  font-size: 14px;
+  text-align: center;
+}
+
+.placeholder code {
+  color: var(--accent);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- Small screens: photo on top, text below ---- */
+
+@media (max-width: 800px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-block: 8px 24px;
+    gap: 8px;
+  }
+
+  .visual {
+    order: -1;
+    min-height: 0;
+  }
+
+  .image {
+    max-height: 62vh;
+  }
+
+  .placeholder {
+    height: 300px;
+  }
+}
+
+/* ---- Big screens: text grows with the wider page ---- */
+
+@media (min-width: 1600px) {
+  .role {
+    font-size: 22px;
+  }
+
+  .intro {
+    max-width: 540px;
+    font-size: 18px;
+  }
+}

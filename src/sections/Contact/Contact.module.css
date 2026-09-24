@@ -1,0 +1,43 @@
+/* Contact form section */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  scroll-margin-top: 24px;
+}
+
+.heading {
+  font-size: 24px;
+  letter-spacing: -0.02em;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.sent {
+  font-size: 14px;
+  color: var(--accent);
+}
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,142 @@
+/* Design tokens — one ladder, one hairline, one accent. */
+:root {
+  /* Surfaces */
+  --page: #0b0b0b;
+  --slab: #171819;
+  --raise-1: rgba(255, 255, 255, 0.045);
+  --raise-2: rgba(255, 255, 255, 0.08);
+  --raise-3: rgba(255, 255, 255, 0.13);
+  --sunken: rgba(0, 0, 0, 0.28);
+  --float: #212325;
+
+  /* Accent */
+  --accent: #2fe57a;
+  --accent-hover: color-mix(in srgb, var(--accent) 88%, black);
+  --accent-ink: #04210f;
+  --tint: color-mix(in srgb, var(--accent) 12%, transparent);
+  --tint-strong: color-mix(in srgb, var(--accent) 18%, transparent);
+
+  /* Danger (tinted, never filled) */
+  --danger-text: #ff8f8f;
+  --danger-tint: rgba(255, 95, 95, 0.12);
+  --danger-tint-strong: rgba(255, 95, 95, 0.2);
+
+  /* Text */
+  --text: rgba(255, 255, 255, 0.92);
+  --text-muted: rgba(255, 255, 255, 0.72);
+  --text-faint: rgba(255, 255, 255, 0.6);
+
+  /* The one hairline, and the one dashed placeholder */
+  --hairline: 1px solid rgba(255, 255, 255, 0.08);
+  --dashed: 2px dashed rgba(255, 255, 255, 0.28);
+
+  /* Soft outline for cards and secondary buttons — drawn inset so it never changes the box size */
+  --outline-soft: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+
+  /* Radii — proportional to the surface */
+  --r-pill: 999px;
+  --r-s: 9px;
+  --r-m: 10px;
+  --r-l: 12px;
+  --r-xl: 14px;
+  --r-item: 16px;
+  --r-card: 20px;
+  --r-panel: 24px;
+
+  /* Layout */
+  --header-h: 64px;
+
+  /* Focus */
+  --focus-ring: 2px solid var(--accent);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-fade: 160ms;
+  --t-move: 280ms;
+
+  color-scheme: dark;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--page);
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page);
+  /* Decorative layers (hero embers, builder) may overhang the gutter —
+     clip at the viewport without turning the page into a sideways scroller */
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+/* The default outline is removed; every interactive element restores it on :focus-visible. */
+:focus {
+  outline: none;
+}
+
+code,
+pre {
+  font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+pre {
+  margin: 0;
+  padding: 16px 20px;
+  background: var(--sunken);
+  border-radius: var(--r-item);
+  overflow-x: auto;
+  font-size: 13px;
+}
+
+/* Scrollbars: thin, no track, no arrows, brand thumb */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-button {
+  display: none;
+}
+::-webkit-scrollbar-thumb {
+  min-height: 32px;
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: var(--r-pill);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent) 85%, transparent);
+}
+@supports not selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--accent) 40%, transparent) transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

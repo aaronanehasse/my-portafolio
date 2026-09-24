@@ -1,0 +1,224 @@
+/* Fills only: all motion is driven from the timelines in scenes.jsx */
+
+.scene,
+.doc {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---- Ladder surfaces, as fills ---- */
+
+.raise1 {
+  fill: var(--raise-1);
+}
+.raise1b {
+  fill: rgba(255, 255, 255, 0.07);
+}
+.raise2 {
+  fill: var(--raise-2);
+}
+.raise3 {
+  fill: var(--raise-3);
+}
+.sunken {
+  fill: var(--sunken);
+}
+.tint {
+  fill: var(--tint-strong);
+}
+.accent {
+  fill: var(--accent);
+}
+.accentSoft {
+  fill: color-mix(in srgb, var(--accent) 70%, black);
+}
+.dot {
+  fill: rgba(255, 255, 255, 0.12);
+}
+
+.ripple {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.cursor {
+  fill: #fff;
+  stroke: var(--page);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+/* ---- Text ---- */
+
+.faintText {
+  fill: var(--text-faint);
+  font: 500 9px system-ui, sans-serif;
+}
+
+.label {
+  fill: var(--text-faint);
+  font: 600 7.5px system-ui, sans-serif;
+  letter-spacing: 0.08em;
+}
+
+.brandText {
+  fill: var(--text);
+  font: 650 11px system-ui, sans-serif;
+}
+
+/* ---- Lode Studio ---- */
+
+.field {
+  fill: var(--raise-2);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.fieldLabel {
+  fill: var(--text-faint);
+  font: 500 8.5px system-ui, sans-serif;
+}
+
+.fieldValue {
+  fill: var(--text);
+  font: 600 8.5px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.swatchRing {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1.5;
+}
+
+.btnText {
+  fill: var(--accent-ink);
+  font: 650 10px system-ui, sans-serif;
+}
+
+.check {
+  color: var(--accent-ink);
+}
+
+/* Voxel faces: stone, optionally painted, then shaded by which way it faces */
+.stone {
+  fill: #3b3f43;
+  stroke: var(--sunken);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+}
+.accentFace {
+  fill: var(--accent);
+}
+.shadow {
+  fill: #000;
+}
+
+/* ---- NMCrate ---- */
+
+.cartIcon {
+  color: var(--text-muted);
+}
+
+
+.badgeCheck {
+  color: var(--accent-ink);
+}
+
+.badgeText {
+  fill: var(--accent-ink);
+  font: 700 8px system-ui, sans-serif;
+}
+
+.pillText {
+  fill: var(--text-faint);
+  font: 500 9px system-ui, sans-serif;
+}
+
+.pillActive {
+  fill: var(--accent);
+  font: 600 9px system-ui, sans-serif;
+}
+
+/* Listing cards: small raised items — raise-1 plus the hairline */
+.card {
+  fill: var(--raise-1);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+/* Hover moves exactly one step up the ladder */
+.cardHover {
+  fill: var(--raise-2);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.price {
+  fill: var(--text);
+  font: 650 10px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.priceFree {
+  fill: var(--accent);
+  font: 650 10px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.plus {
+  color: var(--accent-ink);
+}
+
+.toast {
+  fill: var(--float);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+.toastIcon {
+  color: var(--accent);
+}
+
+.toastTitle {
+  fill: var(--text);
+  font: 600 10px system-ui, sans-serif;
+}
+
+.toastSub {
+  fill: var(--text-faint);
+  font: 500 8.5px system-ui, sans-serif;
+}
+
+.toastValue {
+  fill: var(--accent);
+  font: 700 11px ui-monospace, 'Cascadia Code', Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.spark {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---- NDA document ---- */
+
+.redaction {
+  fill: var(--text-muted);
+}
+
+.scanGlow {
+  fill: var(--tint);
+}
+
+.stamp {
+  fill: var(--tint-strong);
+}
+
+.stampText {
+  fill: var(--accent);
+  font: 800 11px ui-monospace, 'Cascadia Code', Consolas, monospace;
+  letter-spacing: 0.12em;
+}

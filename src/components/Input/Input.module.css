@@ -1,0 +1,79 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Fill only — no border, ever. Focus is an inset fill plus a ring. */
+.control {
+  width: 100%;
+  padding: 14px 16px;
+  border: none;
+  border-radius: var(--r-m);
+  background: var(--raise-1);
+  box-shadow: var(--outline-soft);
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.2;
+  transition:
+    background-color var(--t-fade) var(--ease-out),
+    box-shadow var(--t-fade) var(--ease-out);
+}
+
+.control::placeholder {
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.control:hover {
+  background: var(--raise-2);
+}
+
+.control:focus {
+  background: var(--raise-2);
+  box-shadow:
+    var(--outline-soft),
+    inset 0 0 0 100vmax rgba(255, 255, 255, 0.02);
+}
+
+.control:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.control:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.multiline {
+  min-height: 120px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+/* State is a fill, not a border */
+.invalid,
+.invalid:hover,
+.invalid:focus {
+  background: var(--danger-tint);
+}
+
+.hint,
+.error {
+  font-size: 13px;
+}
+
+.hint {
+  color: var(--text-faint);
+}
+
+.error {
+  color: var(--danger-text);
+}

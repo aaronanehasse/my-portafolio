@@ -1,0 +1,213 @@
+.work {
+  display: flex;
+  flex-direction: column;
+  /* Between products; the intro pulls itself closer to the first one */
+  gap: 136px;
+  scroll-margin-top: 88px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: -72px;
+}
+
+.title {
+  font-size: clamp(28px, 4.5vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.intro {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+/* ---- Product feature: info beside a live scene, alternating sides ---- */
+
+.product {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  align-items: center;
+  gap: 48px;
+}
+
+.productFlip {
+  grid-template-columns: 1.3fr 1fr;
+}
+
+/* Tokens derived from --accent are resolved where they're declared (:root),
+   so re-derive them here for the product's own colour to reach the scene */
+.product {
+  --accent-hover: color-mix(in srgb, var(--accent) 88%, black);
+  --accent-ink: color-mix(in srgb, var(--accent) 14%, black);
+  --tint: color-mix(in srgb, var(--accent) 12%, transparent);
+  --tint-strong: color-mix(in srgb, var(--accent) 18%, transparent);
+  --tilt-y: -14deg;
+}
+
+/* The flipped one sits on the left, so it turns the other way to face its text */
+.productFlip {
+  --tilt-y: 14deg;
+}
+
+.productFlip .stage {
+  order: -1;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+}
+
+.logo {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  border-radius: var(--r-xl);
+  object-fit: contain;
+}
+
+/* Not a real thing yet — the one dashed placeholder style */
+.logoSlot {
+  display: grid;
+  place-items: center;
+  border: var(--dashed);
+  color: var(--text-faint);
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.name {
+  font-size: 24px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.kind {
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.role {
+  margin-left: auto;
+}
+
+.tagline {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.description {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin: 8px 0;
+}
+
+/* No boxes: stats sit in plain columns split by a hairline that fades out at
+   both ends */
+.stat {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  /* Reversed, so this is the top: values line up even when a label wraps */
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.stat + .stat::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  left: -16px;
+  width: 1px;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), transparent);
+  pointer-events: none;
+}
+
+.statValue {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.statLabel {
+  color: var(--text-faint);
+  font-size: 12px;
+}
+
+/* The scene sits in a full panel, clipped to its corners, and tilted in 3D
+   so its outer edge swings toward the viewer */
+.stage {
+  overflow: hidden;
+  border-radius: var(--r-panel);
+  background: var(--slab);
+  box-shadow:
+    var(--outline-soft),
+    0 40px 80px -32px rgba(0, 0, 0, 0.7);
+  transform: perspective(1400px) rotateY(var(--tilt-y)) rotateX(6deg);
+}
+
+@media (max-width: 900px) {
+  .work {
+    gap: 96px;
+  }
+
+  .head {
+    margin-bottom: -40px;
+  }
+
+  .product,
+  .productFlip {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  /* Scene first on both, so the stack reads the same way each time */
+  .stage,
+  .productFlip .stage {
+    order: -1;
+  }
+
+  /* Stacked full width, a deep turn would push an edge off screen */
+  .product {
+    --tilt-y: -6deg;
+  }
+
+  .productFlip {
+    --tilt-y: 6deg;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}

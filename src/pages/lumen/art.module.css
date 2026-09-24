@@ -1,0 +1,259 @@
+/* Fills only: all motion is driven from the timelines in art.jsx.
+   Lumen's palette: near-black surfaces, hairlines, the brand as the only colour. */
+
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.s2 {
+  fill: rgba(255, 255, 255, 0.06);
+}
+.s3 {
+  fill: rgba(255, 255, 255, 0.14);
+}
+.brand {
+  fill: var(--brand);
+}
+
+.row,
+.panel {
+  fill: #141418;
+  stroke: rgba(255, 255, 255, 0.07);
+  stroke-width: 1;
+}
+
+.menu,
+.readout {
+  fill: #1c1c21;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.menuHover {
+  fill: rgba(255, 255, 255, 0.08);
+}
+
+/* ---- Text ---- */
+
+.label {
+  fill: #e4e4e7;
+  font: 500 11px system-ui, sans-serif;
+}
+
+.muted {
+  fill: #a1a1aa;
+  font: 500 9.5px system-ui, sans-serif;
+}
+
+.tiny {
+  fill: #71717a;
+  font: 500 9px system-ui, sans-serif;
+}
+
+.initial {
+  fill: #d4d4d8;
+  font: 700 9px system-ui, sans-serif;
+}
+
+.amount {
+  fill: #e4e4e7;
+  font: 600 10.5px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.amountIn {
+  fill: #4ade80;
+  font: 600 10.5px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.big {
+  fill: #fafafa;
+  font: 650 24px system-ui, sans-serif;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.value {
+  fill: #fafafa;
+  font: 650 14px system-ui, sans-serif;
+}
+
+.menuText {
+  fill: #e4e4e7;
+  font: 500 10px system-ui, sans-serif;
+}
+
+.readoutText {
+  fill: #fafafa;
+  font: 600 9.5px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.readoutDanger {
+  fill: #f87171;
+  font: 600 9.5px ui-monospace, 'Cascadia Code', Consolas, monospace;
+}
+
+.btnText {
+  fill: #fff;
+  font: 650 10.5px system-ui, sans-serif;
+}
+
+/* ---- Tags ---- */
+
+.chip {
+  fill: color-mix(in srgb, var(--brand) 20%, transparent);
+}
+
+.chipText {
+  fill: color-mix(in srgb, var(--brand) 65%, white);
+  font: 600 9.5px system-ui, sans-serif;
+}
+
+.chipOther {
+  fill: rgba(255, 255, 255, 0.07);
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 1;
+  stroke-dasharray: 3 2;
+}
+
+.chipTextOther {
+  fill: #a1a1aa;
+  font: 600 9.5px system-ui, sans-serif;
+}
+
+/* ---- Motion bits ---- */
+
+.scanGlow {
+  fill: color-mix(in srgb, var(--brand) 14%, transparent);
+}
+
+.ripple {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 1.5;
+}
+
+.rippleDanger {
+  fill: none;
+  stroke: #f87171;
+  stroke-width: 1.5;
+}
+
+.cursor {
+  fill: #fff;
+  stroke: #09090b;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+/* ---- Month-end ---- */
+
+.box {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 1.5;
+}
+
+.tick {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.progress {
+  fill: rgba(255, 255, 255, 0.18);
+}
+
+.person {
+  fill: #1f1f24;
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
+.doc {
+  fill: #e4e4e7;
+}
+
+.docLine {
+  fill: #a1a1aa;
+}
+
+/* ---- Security ---- */
+
+.wire {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 1.5;
+  stroke-dasharray: 1;
+}
+
+.shield {
+  fill: #141418;
+  stroke: var(--brand);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.lockBody {
+  fill: var(--brand);
+}
+
+.shackle {
+  fill: none;
+  stroke: var(--brand);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.packet {
+  fill: rgba(255, 255, 255, 0.35);
+}
+
+.danger {
+  fill: #f87171;
+}
+
+.layer {
+  fill: rgba(255, 255, 255, 0.45);
+}
+
+.layerTop {
+  fill: #fff;
+}
+
+/* ---- Cash flow ---- */
+
+.baseline {
+  fill: rgba(255, 255, 255, 0.14);
+}
+
+.barHot {
+  fill: color-mix(in srgb, var(--brand) 65%, white);
+}
+
+.balance {
+  fill: none;
+  stroke: #e4e4e7;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  stroke-linejoin: round;
+}
+
+.balanceKey {
+  stroke: #e4e4e7;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+/* ---- Pipeline ---- */
+
+.orbit {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+}

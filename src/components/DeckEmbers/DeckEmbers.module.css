@@ -1,0 +1,17 @@
+/* Covers the positioned wrapper plus `--ember-pad` on every side, so sparks
+   can travel past the edge they left. Explicit width/height, not inset —
+   see the note in DeckEmbers.jsx. */
+.embers {
+  position: absolute;
+  top: calc(var(--ember-pad) * -1);
+  left: calc(var(--ember-pad) * -1);
+  width: calc(100% + var(--ember-pad) * 2);
+  height: calc(100% + var(--ember-pad) * 2);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .embers {
+    display: none;
+  }
+}

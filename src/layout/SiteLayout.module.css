@@ -1,0 +1,106 @@
+/* Page frame shared by every route: width, header, main column, footer */
+
+.page {
+  /* Grows a step on big screens so the layout doesn't become a small island */
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  transition:
+    top var(--t-move) var(--ease-out),
+    height var(--t-move) var(--ease-out),
+    padding var(--t-move) var(--ease-out),
+    border-radius var(--t-move) var(--ease-out),
+    background-color var(--t-move) var(--ease-out),
+    box-shadow var(--t-move) var(--ease-out),
+    backdrop-filter var(--t-move) var(--ease-out);
+}
+
+/* Once the page scrolls, the bar lifts off into a floating island */
+.headerScrolled {
+  top: 12px;
+  height: 56px;
+  padding: 0 8px 0 16px;
+  border-radius: var(--r-pill);
+  background-color: rgba(11, 11, 11, 0.6);
+  box-shadow: var(--outline-soft), 0 8px 32px rgba(0, 0, 0, 0.4);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: none;
+  }
+}
+
+.logoLink {
+  display: block;
+  border-radius: var(--r-s);
+}
+
+.logoLink:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 4px;
+}
+
+.logo {
+  display: block;
+  height: 32px;
+  width: auto;
+}
+
+.nav {
+  display: flex;
+  gap: 4px;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  /* Generous air between sections; scales with the screen */
+  gap: clamp(128px, 18vh, 200px);
+  padding: 0 0 clamp(96px, 14vh, 160px);
+}
+
+.footer {
+  padding: 32px 0;
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+@media (min-width: 1600px) {
+  .page {
+    max-width: 1240px;
+  }
+}
+
+@media (min-width: 2200px) {
+  .page {
+    max-width: 1440px;
+  }
+}
+
+@media (max-width: 600px) {
+  .page {
+    padding: 0 16px;
+  }
+
+  .main {
+    gap: 96px;
+    padding-top: 8px;
+  }
+}

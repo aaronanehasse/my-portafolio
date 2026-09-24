@@ -1,0 +1,232 @@
+.philosophy {
+  display: flex;
+  flex-direction: column;
+  gap: 82px;
+  /* The hero keeps extra bottom padding for its own balance; don't stack the
+     full section gap on top of it */
+  margin-top: -56px;
+  scroll-margin-top: 88px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  font-size: clamp(28px, 4.5vw, 40px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.lead {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.muted {
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* ---- The argument: problem and answer as two matching cards ---- */
+
+.points {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: -40px; /* sits close under the lead; it's the same thought */
+}
+
+.point {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+/* Same height for both illustrations, so the text below them lines up */
+.pointArt {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 220px;
+  margin-bottom: 8px;
+}
+
+/* No cards: columns are split by a hairline that fades out at both ends.
+   Set on the gap's centre line; flips to horizontal once columns stack. */
+.point + .point::before {
+  content: '';
+  position: absolute;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.16), transparent);
+  pointer-events: none;
+}
+
+.point + .point::before {
+  top: 0;
+  bottom: 0;
+  left: -32px;
+  width: 1px;
+}
+
+.art {
+  width: auto;
+  height: 190px;
+  max-width: 100%;
+}
+
+.pointTitle {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.pointBody {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+/* ---- The proof: one brief, three makers ---- */
+
+.compare {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.compareHead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.subTitle {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 760px) {
+  .points {
+    grid-template-columns: 1fr;
+  }
+
+  .point + .point::before {
+    top: -32px;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    width: auto;
+    height: 1px;
+  }
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps > li {
+  display: flex;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+/* The last step is the point of the section — give it the accent glow */
+.stepAccent {
+  box-shadow: inset 0 0 0 1px var(--tint-strong);
+  background-image: radial-gradient(120% 80% at 50% 0%, var(--tint), transparent 70%);
+}
+
+.stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: var(--r-item);
+  overflow: hidden;
+}
+
+.svg {
+  display: block;
+  width: 60%;
+  height: auto;
+}
+
+/* A gentle bob: the only motion the polished version gets */
+.float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float {
+    animation: none;
+  }
+}
+
+/* An empty slot — dashed like the page's other placeholders */
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: calc(100% - 24px);
+  height: calc(100% - 24px);
+  border: var(--dashed);
+  border-radius: var(--r-l);
+  color: var(--text-faint);
+  font-size: 13px;
+  text-align: center;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.stepTitle {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+
+.description {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  text-wrap: pretty;
+}
+
+@media (max-width: 860px) {
+  .steps {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+  }
+}

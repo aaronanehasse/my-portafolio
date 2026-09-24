@@ -1,0 +1,98 @@
+/* Fills the first screen below the header, like the home hero */
+.hero {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  align-items: center;
+  gap: 56px;
+  min-height: calc(100svh - var(--header-h));
+  padding-block: 24px calc(24px + 6svh);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.title {
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.intro {
+  max-width: 480px;
+  color: var(--text-muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+.facts li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.factIcon {
+  flex: none;
+  color: var(--accent);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* The demo bleeds a little past the column on wide screens, like a product shot */
+.demo {
+  width: calc(100% + 40px);
+}
+
+.demoBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.demoNote {
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.demoActions {
+  display: flex;
+  gap: 4px;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    min-height: 0;
+    padding-block: 24px 48px;
+  }
+
+  .demo {
+    width: 100%;
+  }
+}
