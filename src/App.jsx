@@ -25,8 +25,10 @@ function chunk(importer) {
  * router (lib/router.jsx) takes them over to fade between pages instead of
  * reloading. Hosting needs a fallback that serves index.html for every path.
  * `bare` pages don't use the shared layout, so they get the fade here.
- * `title` is a key in the language files (titles.*).
+ * `title` is a key in the language files (titles.*); `props` go to the page.
  */
+const legal = chunk(() => import('./pages/legal/LegalPage.jsx'))
+
 const routes = {
   '/services/websites': {
     page: chunk(() => import('./pages/websites/WebsitesPage.jsx')),
@@ -38,6 +40,8 @@ const routes = {
     title: 'lumen',
     bare: true,
   },
+  '/privacy': { page: legal, title: 'privacy', props: { doc: 'privacy' } },
+  '/imprint': { page: legal, title: 'imprint', props: { doc: 'imprint' } },
 }
 
 export default function App() {
@@ -62,16 +66,16 @@ function Routes() {
   }, [title])
 
   if (!route) return <HomePage />
-  const { page, bare } = route
+  const { page, bare, props } = route
   const Page = page.Component ?? page.Lazy
   return (
     <Suspense fallback={null}>
       {bare ? (
         <div className={fade}>
-          <Page />
+          <Page {...props} />
         </div>
       ) : (
-        <Page />
+        <Page {...props} />
       )}
     </Suspense>
   )

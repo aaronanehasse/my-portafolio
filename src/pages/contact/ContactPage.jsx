@@ -340,6 +340,11 @@ export default function ContactPage() {
                   <span />
                 )}
                 <div className={styles.navEnd}>
+                  {step === LAST && status !== 'error' && (
+                    <p className={styles.privacyNote}>
+                      {t('contact.privacy', { link: <a href="/privacy">{t('contact.privacyLink')}</a> })}
+                    </p>
+                  )}
                   {status === 'error' && (
                     <p className={styles.error} role="alert">
                       {t('contact.failed')}

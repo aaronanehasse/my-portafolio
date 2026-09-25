@@ -13,6 +13,8 @@ export default {
       websites: 'Website creation · Aaron Anehasse',
       contact: 'Start a project · Aaron Anehasse',
       lumen: 'Lumen — bookkeeping that runs itself (demo)',
+      privacy: 'Privacy policy · Aaron Anehasse',
+      imprint: 'Imprint · Aaron Anehasse',
     },
 
     nav: {
@@ -25,6 +27,8 @@ export default {
     footer: {
       copyright: '© {year} Aaron Anehasse',
       language: 'Language',
+      privacy: 'Privacy',
+      imprint: 'Imprint',
     },
 
     hero: {
@@ -199,6 +203,8 @@ export default {
       ],
       progress: 'Step {n} of {total} · {label}',
       saved: 'Draft saved on this device',
+      privacy: 'How I handle what you send: {link}.',
+      privacyLink: 'privacy policy',
       back: 'Back',
       continue: 'Continue',
       sending: 'Sending…',
@@ -476,6 +482,129 @@ export default {
           '15k+': '€15k+',
           unsure: 'Not sure yet',
         },
+      },
+    },
+
+    legal: {
+      updated: 'Last updated {date}',
+      date: '25 September 2026',
+
+      imprint: {
+        title: 'Imprint',
+        intro: 'The business behind this site and how to reach it.',
+        labels: {
+          company: 'Company',
+          form: 'Legal form',
+          represented: 'Represented by',
+          address: 'Address',
+          email: 'Email',
+          vat: 'VAT number',
+        },
+        form: 'Private limited company (osaühing) under Estonian law',
+        sections: [
+          {
+            title: 'About the content',
+            body: [
+              'I write and check everything on this site with care, but I can’t guarantee it’s always complete or up to date. Prices, timelines and offers only become binding once I confirm them to you in writing.',
+            ],
+          },
+          {
+            title: 'Links to other sites',
+            body: ['Links to other sites are there for convenience. I have no control over those sites and I’m not responsible for what’s on them.'],
+          },
+          {
+            title: 'Copyright',
+            body: ['The design, code, text and images on this site are mine unless stated otherwise. Please ask before reusing any of it: {email}.'],
+          },
+        ],
+      },
+
+      privacy: {
+        title: 'Privacy policy',
+        intro: 'What this site collects, why, and what you can do about it. Short version: no tracking, no analytics, no ads, and nothing is sold or shared for marketing.',
+        sections: [
+          {
+            title: 'Who is responsible',
+            body: [
+              'This site is run by Nexomaker OÜ, my company, represented by me, Aaron Anehasse Romera. Nexomaker OÜ is the controller of your personal data. The full company details are on the imprint page.',
+              'For anything about your data, email {email}.',
+            ],
+          },
+          {
+            title: 'When you visit',
+            body: [
+              'The site is hosted by Vercel. To deliver pages and keep the service secure, Vercel’s servers log technical data about each request: your IP address, browser, the page requested and the time. The legal basis is legitimate interest (GDPR Art. 6(1)(f)): a website can’t be served or protected without it. Vercel keeps these logs only for a limited time.',
+              'There are no analytics, tracking pixels, ads or third-party embeds, and the site sets no cookies.',
+            ],
+          },
+          {
+            title: 'Stored on your device',
+            body: [
+              'The site saves two things in your browser’s local storage, and they never leave your device:',
+              [
+                'Your language choice, so the site stays in the language you picked.',
+                'A draft of the contact form while you fill it in, so you don’t lose it on a reload. It’s removed once you send the request.',
+              ],
+              'Both only exist to do what you asked for, so no consent is needed. You can remove them at any time by clearing this site’s data in your browser.',
+            ],
+          },
+          {
+            title: 'When you send a project request',
+            body: [
+              'The contact form collects your name, email, company (if you give it) and everything you tell me about the project, including any links. I use it to reply, to prepare a quote or a free preview, and, if we work together, to run the project.',
+              'The legal basis is taking steps at your request before entering into a contract (GDPR Art. 6(1)(b)). The request reaches me by email, and you get an automatic copy of what you sent.',
+            ],
+          },
+          {
+            title: 'Who else handles it',
+            body: [
+              'Only the services needed to run the site and deliver email, each bound by a data processing agreement:',
+              [
+                'Vercel Inc.: hosting, and the server function that receives the form.',
+                'Resend: sends the request to me and the copy to you.',
+                'My email provider: the inbox the request arrives in.',
+              ],
+              'Your data isn’t sold, rented or used for marketing.',
+            ],
+          },
+          {
+            title: 'Transfers outside the EU',
+            body: [
+              'Vercel and Resend are based in the United States, so your data may be processed there. These transfers rely on the EU–US Data Privacy Framework or on the European Commission’s standard contractual clauses.',
+            ],
+          },
+          {
+            title: 'How long it’s kept',
+            body: [
+              'Requests that don’t lead to a project are deleted within 12 months. If we work together, I keep what’s needed for the project for as long as it runs, and invoices and related records for as long as accounting and tax law requires (7 years in Estonia).',
+            ],
+          },
+          {
+            title: 'Your rights',
+            body: [
+              'Under the GDPR you can:',
+              [
+                'ask for a copy of the data I hold about you',
+                'have it corrected if it’s wrong',
+                'have it deleted',
+                'restrict how it’s used',
+                'receive it in a portable format',
+                'object to processing based on legitimate interest',
+              ],
+              'Email {email} and I’ll reply within one month. No decisions about you are made automatically.',
+            ],
+          },
+          {
+            title: 'Complaints',
+            body: [
+              'If you think your data is being mishandled, please tell me first so I can fix it. You can also complain to a data protection authority: the Estonian Data Protection Inspectorate (Andmekaitse Inspektsioon, aki.ee), where Nexomaker OÜ is registered, or the authority where you live or work, such as the Belgian Data Protection Authority (dataprotectionauthority.be).',
+            ],
+          },
+          {
+            title: 'Changes',
+            body: ['If this policy changes, the new version is posted here with a new date at the top.'],
+          },
+        ],
       },
     },
   },

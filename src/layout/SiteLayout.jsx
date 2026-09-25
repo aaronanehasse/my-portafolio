@@ -8,7 +8,8 @@ import styles from './SiteLayout.module.css'
  * Header, main column and footer shared by every page. On the home page the
  * nav links are in-page anchors; elsewhere they point back to the home page's
  * sections. Contact is its own page (/contact); `current` marks the page you're on.
- * The footer has the language switch, one entry per file in src/i18n/locales.
+ * The footer has the legal pages and the language switch, one entry per file
+ * in src/i18n/locales.
  */
 export default function SiteLayout({ home = false, current, children }) {
   const { t, lang, setLang } = useT()
@@ -47,7 +48,15 @@ export default function SiteLayout({ home = false, current, children }) {
       <main className={`${styles.main} ${fade}`}>{children}</main>
 
       <footer className={`${styles.footer} ${fade}`}>
-        <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
+        <div className={styles.footerStart}>
+          <span>{t('footer.copyright', { year: new Date().getFullYear() })}</span>
+          <a className={styles.footerLink} href="/privacy">
+            {t('footer.privacy')}
+          </a>
+          <a className={styles.footerLink} href="/imprint">
+            {t('footer.imprint')}
+          </a>
+        </div>
         <nav className={styles.languages} aria-label={t('footer.language')}>
           {Object.entries(languages).map(([code, { name, short }]) => (
             // Real links (?lang=xx), so they can be opened or copied; a plain click switches in place

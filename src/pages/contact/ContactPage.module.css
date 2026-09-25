@@ -266,6 +266,22 @@
   text-align: right;
 }
 
+.privacyNote {
+  max-width: 280px;
+  color: var(--text-faint);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.privacyNote a {
+  color: var(--text-muted);
+  text-underline-offset: 3px;
+}
+
+.privacyNote a:hover {
+  color: var(--text);
+}
+
 /* ---- Website detail blocks ---- */
 
 .plainFieldset {

@@ -1,0 +1,100 @@
+/* A single reading column, the same heading scale as the contact page */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  max-width: 720px;
+  padding-block: clamp(24px, 6vh, 64px) 48px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  font-size: clamp(32px, 4.5vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.intro {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.updated {
+  color: var(--text-faint);
+  font-size: 13px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  border-top: var(--hairline);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: var(--hairline);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.row dt {
+  color: var(--text-faint);
+}
+
+.row dd {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.heading {
+  color: var(--text);
+  font-size: 19px;
+  letter-spacing: -0.01em;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 20px;
+}
+
+.page a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--raise-3);
+  text-underline-offset: 3px;
+}
+
+.page a:hover {
+  text-decoration-color: currentColor;
+}
+
+@media (max-width: 560px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}

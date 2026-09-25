@@ -12,6 +12,8 @@ export default {
       websites: 'Websites laten maken · Aaron Anehasse',
       contact: 'Start een project · Aaron Anehasse',
       lumen: 'Lumen — boekhouding die zichzelf doet (demo)',
+      privacy: 'Privacybeleid · Aaron Anehasse',
+      imprint: 'Bedrijfsgegevens · Aaron Anehasse',
     },
 
     nav: {
@@ -24,6 +26,8 @@ export default {
     footer: {
       copyright: '© {year} Aaron Anehasse',
       language: 'Taal',
+      privacy: 'Privacy',
+      imprint: 'Bedrijfsgegevens',
     },
 
     hero: {
@@ -198,6 +202,8 @@ export default {
       ],
       progress: 'Stap {n} van {total} · {label}',
       saved: 'Concept opgeslagen op dit apparaat',
+      privacy: 'Hoe ik omga met wat je stuurt: {link}.',
+      privacyLink: 'privacybeleid',
       back: 'Terug',
       continue: 'Verder',
       sending: 'Versturen…',
@@ -466,6 +472,129 @@ export default {
           '15k+': '€15k+',
           unsure: 'Weet ik nog niet',
         },
+      },
+    },
+
+    legal: {
+      updated: 'Laatst bijgewerkt op {date}',
+      date: '25 september 2026',
+
+      imprint: {
+        title: 'Bedrijfsgegevens',
+        intro: 'Het bedrijf achter deze site en hoe je het bereikt.',
+        labels: {
+          company: 'Bedrijf',
+          form: 'Rechtsvorm',
+          represented: 'Vertegenwoordigd door',
+          address: 'Adres',
+          email: 'E-mail',
+          vat: 'Btw-nummer',
+        },
+        form: 'Besloten vennootschap (osaühing) naar Ests recht',
+        sections: [
+          {
+            title: 'Over de inhoud',
+            body: [
+              'Ik schrijf en controleer alles op deze site met zorg, maar ik kan niet garanderen dat het altijd volledig of actueel is. Prijzen, termijnen en aanbiedingen zijn pas bindend zodra ik ze schriftelijk aan je bevestig.',
+            ],
+          },
+          {
+            title: 'Links naar andere sites',
+            body: ['Links naar andere sites staan er voor het gemak. Ik heb geen controle over die sites en ben niet verantwoordelijk voor wat erop staat.'],
+          },
+          {
+            title: 'Auteursrecht',
+            body: ['Het ontwerp, de code, teksten en beelden op deze site zijn van mij, tenzij anders vermeld. Vraag het even voor je iets hergebruikt: {email}.'],
+          },
+        ],
+      },
+
+      privacy: {
+        title: 'Privacybeleid',
+        intro: 'Wat deze site verzamelt, waarom, en wat je eraan kunt doen. Kort gezegd: geen tracking, geen analytics, geen advertenties, en niets wordt verkocht of gedeeld voor marketing.',
+        sections: [
+          {
+            title: 'Wie is verantwoordelijk',
+            body: [
+              'Deze site wordt beheerd door Nexomaker OÜ, mijn bedrijf, vertegenwoordigd door mij, Aaron Anehasse Romera. Nexomaker OÜ is de verwerkingsverantwoordelijke voor je persoonsgegevens. De volledige gegevens staan op de pagina Bedrijfsgegevens.',
+              'Voor alles over je gegevens mail je naar {email}.',
+            ],
+          },
+          {
+            title: 'Als je de site bezoekt',
+            body: [
+              'De site wordt gehost door Vercel. Om pagina’s te leveren en de dienst te beveiligen, loggen de servers van Vercel technische gegevens over elk verzoek: je IP-adres, browser, de opgevraagde pagina en het tijdstip. De rechtsgrond is gerechtvaardigd belang (AVG art. 6, lid 1, f): zonder deze gegevens kan een website niet geleverd of beveiligd worden. Vercel bewaart deze logs maar een beperkte tijd.',
+              'Er zijn geen analytics, trackingpixels, advertenties of ingesloten diensten van derden, en de site plaatst geen cookies.',
+            ],
+          },
+          {
+            title: 'Opgeslagen op je apparaat',
+            body: [
+              'De site bewaart twee dingen in de lokale opslag van je browser, en die verlaten je apparaat nooit:',
+              [
+                'Je taalkeuze, zodat de site in de gekozen taal blijft.',
+                'Een concept van het contactformulier terwijl je het invult, zodat je het niet kwijt bent na herladen. Het wordt verwijderd zodra je de aanvraag verstuurt.',
+              ],
+              'Beide zijn er alleen om te doen waar je zelf om vraagt, dus er is geen toestemming nodig. Je kunt ze altijd verwijderen door de gegevens van deze site in je browser te wissen.',
+            ],
+          },
+          {
+            title: 'Als je een projectaanvraag stuurt',
+            body: [
+              'Het contactformulier verzamelt je naam, e-mailadres, bedrijf (als je dat opgeeft) en alles wat je me over het project vertelt, inclusief links. Ik gebruik dat om te antwoorden, een offerte of gratis preview te maken en, als we samenwerken, om het project uit te voeren.',
+              'De rechtsgrond is het nemen van stappen op jouw verzoek voordat er een overeenkomst is (AVG art. 6, lid 1, b). De aanvraag komt per e-mail bij mij binnen, en je krijgt automatisch een kopie van wat je stuurde.',
+            ],
+          },
+          {
+            title: 'Wie er nog meer mee werkt',
+            body: [
+              'Alleen de diensten die nodig zijn om de site te draaien en e-mail te bezorgen, elk gebonden aan een verwerkersovereenkomst:',
+              [
+                'Vercel Inc.: hosting, en de serverfunctie die het formulier ontvangt.',
+                'Resend: stuurt de aanvraag naar mij en de kopie naar jou.',
+                'Mijn e-mailprovider: de inbox waar de aanvraag binnenkomt.',
+              ],
+              'Je gegevens worden niet verkocht, verhuurd of gebruikt voor marketing.',
+            ],
+          },
+          {
+            title: 'Doorgifte buiten de EU',
+            body: [
+              'Vercel en Resend zijn gevestigd in de Verenigde Staten, dus je gegevens kunnen daar verwerkt worden. Die doorgifte steunt op het EU-VS Data Privacy Framework of op de standaardcontractbepalingen van de Europese Commissie.',
+            ],
+          },
+          {
+            title: 'Hoe lang het bewaard wordt',
+            body: [
+              'Aanvragen die niet tot een project leiden, worden binnen 12 maanden verwijderd. Als we samenwerken, bewaar ik wat nodig is voor het project zolang het loopt, en facturen en bijbehorende stukken zolang de boekhoud- en belastingwetgeving dat vereist (7 jaar in Estland).',
+            ],
+          },
+          {
+            title: 'Je rechten',
+            body: [
+              'Onder de AVG kun je:',
+              [
+                'een kopie vragen van de gegevens die ik over je heb',
+                'ze laten corrigeren als ze niet kloppen',
+                'ze laten verwijderen',
+                'het gebruik ervan laten beperken',
+                'ze ontvangen in een overdraagbaar formaat',
+                'bezwaar maken tegen verwerking op basis van gerechtvaardigd belang',
+              ],
+              'Mail naar {email} en je krijgt binnen een maand antwoord. Er worden geen automatische beslissingen over je genomen.',
+            ],
+          },
+          {
+            title: 'Klachten',
+            body: [
+              'Denk je dat er slordig met je gegevens wordt omgegaan, laat het me dan eerst weten zodat ik het kan rechtzetten. Je kunt ook een klacht indienen bij een toezichthouder: de Estse Andmekaitse Inspektsioon (aki.ee), waar Nexomaker OÜ geregistreerd is, of de toezichthouder waar je woont of werkt, zoals de Belgische Gegevensbeschermingsautoriteit (gegevensbeschermingsautoriteit.be).',
+            ],
+          },
+          {
+            title: 'Wijzigingen',
+            body: ['Als dit beleid verandert, staat de nieuwe versie hier met een nieuwe datum bovenaan.'],
+          },
+        ],
       },
     },
   },
