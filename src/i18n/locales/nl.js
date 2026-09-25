@@ -1,5 +1,5 @@
 /*
- * Nederlands. Same keys as en.jsx; anything missing here falls back to English.
+ * Nederlands. Same keys as en.js; anything missing here falls back to English.
  * `{name}` marks a placeholder the code fills in; keep it as is.
  */
 

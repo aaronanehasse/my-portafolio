@@ -1,5 +1,5 @@
-import en from '../i18n/locales/en.jsx'
-import nl from '../i18n/locales/nl.jsx'
+import en from '../i18n/locales/en.js'
+import nl from '../i18n/locales/nl.js'
 
 /*
  * What a shared link shows (Discord, WhatsApp, Slack…): title, description
@@ -11,7 +11,7 @@ import nl from '../i18n/locales/nl.jsx'
  * The words all come from the language files; nothing here is new copy.
  */
 
-export const SITE = 'https://aaronanehasse.space'
+export const SITE = 'https://www.aaronanehasse.space'
 export const DEFAULT_LANG = 'en'
 
 const messages = { en: en.messages, nl: nl.messages }

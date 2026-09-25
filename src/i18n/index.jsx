@@ -3,13 +3,13 @@ import { createContext, Fragment, useCallback, useContext, useEffect, useMemo, u
 /*
  * Translations.
  *
- * Every file in ./locales is a language: `en.jsx` is English, `nl.jsx` Dutch.
+ * Every file in ./locales is a language: `en.js` is English, `nl.js` Dutch.
  * They're found automatically, so adding a language is adding one file:
  *
  *   export default {
  *     name: 'Français',   // shown in the language switcher
  *     short: 'FR',
- *     messages: { ... },  // same keys as en.jsx; anything missing falls back to English
+ *     messages: { ... },  // same keys as en.js; anything missing falls back to English
  *   }
  *
  * Which language shows, in order: ?lang=xx in the URL (e.g. ?lang=nl, which
@@ -25,11 +25,11 @@ import { createContext, Fragment, useCallback, useContext, useEffect, useMemo, u
  *   t('services.items')                   arrays and objects come back whole
  */
 
-const files = import.meta.glob('./locales/*.jsx', { eager: true })
+const files = import.meta.glob('./locales/*.js', { eager: true })
 
 /** { en: { name, short, messages }, nl: {…}, … } */
 export const languages = Object.fromEntries(
-  Object.entries(files).map(([path, module]) => [path.match(/([\w-]+)\.jsx$/)[1], module.default]),
+  Object.entries(files).map(([path, module]) => [path.match(/([\w-]+)\.js$/)[1], module.default]),
 )
 
 export const DEFAULT_LANG = 'en'

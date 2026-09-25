@@ -7,9 +7,11 @@ import { DEFAULT_LANG, LANGS, langFor, pageFor, share, SITE } from './src/lib/sh
  * rewritten for the path and ?lang= (English without it), and html lang set.
  * The image is drawn by api/og.js.
  *
- * Vercel runs this before its rewrites; files (anything with a dot) and /api
- * skip it. If index.html can't be fetched (a protected preview, say), the
- * request carries on untouched.
+ * Vercel runs this before its rewrites, on Node; files (anything with a dot)
+ * and /api skip it. It runs on every page, so it must never break one: if
+ * anything goes wrong (index.html can't be fetched on a protected preview,
+ * say), the request carries on untouched with index.html's own tags.
+ * Everything it imports has to be plain .js that Node can load as is.
  */
 
 export const config = { matcher: ['/((?!api/|.*\\.).*)'] }
@@ -49,16 +51,20 @@ function tags(info, origin) {
 }
 
 export default async function middleware(request) {
-  const url = new URL(request.url)
-  const page = await fetch(new URL('/index.html', url))
-  if (!page.ok) return
+  try {
+    const url = new URL(request.url)
+    const page = await fetch(new URL('/index.html', url))
+    if (!page.ok) return
 
-  const info = share(pageFor(url.pathname), langFor(url.searchParams.get('lang')))
-  const html = (await page.text())
-    .replace(/<!-- share[\s\S]*?<!-- \/share -->/, tags(info, url.origin))
-    .replace(/<html lang="[^"]*"/, `<html lang="${info.lang}"`)
+    const info = share(pageFor(url.pathname), langFor(url.searchParams.get('lang')))
+    const html = (await page.text())
+      .replace(/<!-- share[\s\S]*?<!-- \/share -->/, tags(info, url.origin))
+      .replace(/<html lang="[^"]*"/, `<html lang="${info.lang}"`)
 
-  return new Response(html, {
-    headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=0, must-revalidate' },
-  })
+    return new Response(html, {
+      headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=0, must-revalidate' },
+    })
+  } catch (error) {
+    console.error('[share] serving the page as is:', error)
+  }
 }

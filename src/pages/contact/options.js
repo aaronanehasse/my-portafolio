@@ -42,7 +42,7 @@ import {
  * What the project setup offers to pick from: ids (and icons) only. Answers
  * are stored as these ids, so a draft and the email don't depend on the
  * language. Each id's words live in the language files, under
- * contact.o.<group>.<id> (see src/i18n/locales/en.jsx); `localize` joins the two.
+ * contact.o.<group>.<id> (see src/i18n/locales/en.js); `localize` joins the two.
  */
 
 /** A list of { id, Icon } as options for the controls, labelled in the current language. */
