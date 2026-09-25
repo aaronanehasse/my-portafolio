@@ -1,6 +1,7 @@
 import { useId } from 'react'
 import { Moon, Sun } from 'lucide-react'
-import { styleByValue } from './options.js'
+import { useT } from '../../i18n/index.jsx'
+import { styleById } from './options.js'
 import css from './SitePreview.module.css'
 
 /*
@@ -12,14 +13,14 @@ import css from './SitePreview.module.css'
  */
 
 const THEMES = [
-  { value: 'Dark', Icon: Moon },
-  { value: 'Light', Icon: Sun },
+  { id: 'dark', Icon: Moon },
+  { id: 'light', Icon: Sun },
 ]
 
 // Before brand colours are chosen: greys that read on each theme
 const NEUTRAL = {
-  Dark: { primary: '#e9e9e6', secondary: '#55585e', accent: '' },
-  Light: { primary: '#2b2d31', secondary: '#9aa0a6', accent: '' },
+  dark: { primary: '#e9e9e6', secondary: '#55585e', accent: '' },
+  light: { primary: '#2b2d31', secondary: '#9aa0a6', accent: '' },
 }
 
 /** Dark or light text, whichever reads on this colour. */
@@ -32,29 +33,31 @@ function inkOn(hex) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.4 ? '#141414' : '#ffffff'
 }
 
-export default function SitePreview({ business, pages, colors, style, features, theme = 'Dark', onTheme }) {
+export default function SitePreview({ business, pages, colors, style, features, theme = 'dark', onTheme }) {
+  const { t } = useT()
+  const ts = (key) => t(`contact.sketch.${key}`)
   const radioName = useId()
-  const name = business.trim() || 'Your business'
+  const name = business.trim() || ts('yourBusiness')
   // Each colour falls back on its own, so choosing just a primary already shows
-  const base = NEUTRAL[theme]
+  const base = NEUTRAL[theme] ?? NEUTRAL.dark
   const c = {
     primary: colors?.primary || base.primary,
     secondary: colors?.secondary || base.secondary,
     accent: colors?.accent || '',
   }
-  const face = styleByValue[style]
+  const face = styleById[style]
   const type = face
     ? { fontFamily: face.font, fontWeight: face.weight, fontStyle: face.italic ? 'italic' : undefined }
     : { fontWeight: 700 }
   const domain = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '') || 'yourbusiness'}.com`
-  const shop = features.includes('Online store')
-  const cta = features.includes('Bookings & appointments') ? 'Book now' : shop ? 'Shop' : 'Contact'
+  const shop = features.includes('store')
+  const cta = features.includes('booking') ? ts('bookNow') : shop ? ts('shop') : ts('contact')
 
   return (
     <figure className={css.preview}>
       <div
         className={css.window}
-        data-theme={theme.toLowerCase()}
+        data-theme={theme}
         aria-hidden="true"
         style={{
           '--p': c.primary,
@@ -99,7 +102,7 @@ export default function SitePreview({ business, pages, colors, style, features, 
               <span className={css.line} style={{ width: '62%' }} />
               <span className={css.buttons}>
                 <span className={css.primary}>{cta}</span>
-                <span className={css.secondary}>Learn more</span>
+                <span className={css.secondary}>{ts('learnMore')}</span>
               </span>
             </div>
             <div className={css.art}>
@@ -120,20 +123,20 @@ export default function SitePreview({ business, pages, colors, style, features, 
         </div>
       </div>
       <div className={css.bar}>
-        <figcaption className={css.caption}>A rough sketch that updates as you add details. Not the design.</figcaption>
+        <figcaption className={css.caption}>{ts('caption')}</figcaption>
         {onTheme && (
-          <div className={css.themes} role="radiogroup" aria-label="Site theme">
-            {THEMES.map(({ value, Icon }) => (
-              <label key={value} className={`${css.theme} ${theme === value ? css.themeOn : ''}`}>
+          <div className={css.themes} role="radiogroup" aria-label={ts('themeLabel')}>
+            {THEMES.map(({ id, Icon }) => (
+              <label key={id} className={`${css.theme} ${theme === id ? css.themeOn : ''}`}>
                 <input
                   className={css.hiddenInput}
                   type="radio"
                   name={radioName}
-                  checked={theme === value}
-                  onChange={() => onTheme(value)}
+                  checked={theme === id}
+                  onChange={() => onTheme(id)}
                 />
                 <Icon size={13} aria-hidden="true" />
-                {value}
+                {t(`contact.o.theme.${id}`)}
               </label>
             ))}
           </div>

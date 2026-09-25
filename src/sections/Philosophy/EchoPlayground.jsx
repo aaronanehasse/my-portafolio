@@ -2,19 +2,15 @@ import { useRef, useState } from 'react'
 import { Button } from '../../components'
 import AiLogo from '../../components/AiLogo/AiLogo.jsx'
 import useInView from '../../hooks/useInView.js'
+import { useT } from '../../i18n/index.jsx'
 import styles from './EchoPlayground.module.css'
 
-const states = [
-  { id: 'greeting', label: 'Wave' },
-  { id: 'thinking', label: 'Think' },
-  { id: 'typing', label: 'Type' },
-  { id: 'finished', label: 'Finish' },
-  { id: 'sleeping', label: 'Sleep' },
-  { id: 'idle', label: 'Idle' },
-]
+// The buttons' words are in the language files (echo.states)
+const states = ['greeting', 'thinking', 'typing', 'finished', 'sleeping', 'idle']
 
 /** The live Echo logo, with buttons to put it through its states. */
 export default function EchoPlayground({ size = 150 }) {
+  const { t } = useT()
   const [state, setState] = useState('greeting')
   const logoRef = useRef(null)
   // Mounting into `greeting` plays the wave, so hold off until it's really on screen
@@ -28,7 +24,7 @@ export default function EchoPlayground({ size = 150 }) {
           state={state}
           size={size}
           followCursor
-          title="Echo AI logo, animated"
+          title={t('echo.logo')}
           // Wave and Finish are one-shots; settle back to idle when they end
           onFinished={() => setState('idle')}
           />
@@ -36,16 +32,16 @@ export default function EchoPlayground({ size = 150 }) {
           <div style={{ width: size, height: size }} />
         )}
       </div>
-      <div className={styles.controls} role="group" aria-label="Echo animation">
-        {states.map((s) => (
+      <div className={styles.controls} role="group" aria-label={t('echo.controls')}>
+        {states.map((id) => (
           <Button
-            key={s.id}
+            key={id}
             size="s"
-            variant={state === s.id ? 'secondary' : 'ghost'}
-            aria-pressed={state === s.id}
-            onClick={() => setState(s.id)}
+            variant={state === id ? 'secondary' : 'ghost'}
+            aria-pressed={state === id}
+            onClick={() => setState(id)}
           >
-            {s.label}
+            {t(`echo.states.${id}`)}
           </Button>
         ))}
       </div>

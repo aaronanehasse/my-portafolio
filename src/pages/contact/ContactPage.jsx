@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, Check, Send } from 'lucide-react'
 import { Button, Card } from '../../components'
 import useFormSender from '../../hooks/useFormSender.jsx'
+import { useT } from '../../i18n/index.jsx'
 import SiteLayout from '../../layout/SiteLayout.jsx'
-import { budgetsFor, kindByValue } from './options.js'
+import { BUDGET_UNSURE, budgetsFor, kindIds, labelOf } from './options.js'
 import { DetailsStep, ProjectStep, ReviewStep, TypeStep, YouStep } from './steps.jsx'
 import { summarize } from './summary.js'
 import styles from './ContactPage.module.css'
@@ -18,14 +19,9 @@ import styles from './ContactPage.module.css'
  *   /contact?type=components | mobile | other
  */
 
-const STEPS = [
-  { label: 'Type', title: 'What are we making?', intro: 'Pick the closest fit. You can explain the rest next.' },
-  { label: 'Project', title: 'Tell me about it', intro: 'A title and a few sentences on what it is and who it’s for.' },
-  { label: 'Details', title: 'The details', intro: 'The specifics I need to give you an accurate answer.' },
-  { label: 'You', title: 'Where do I reply?', intro: 'I’ll only use this to get back to you about this project.' },
-  { label: 'Review', title: 'Check and send', intro: 'Make sure everything’s right. You can edit any part.' },
-]
-const LAST = STEPS.length - 1
+// Their words are in the language files (contact.steps)
+const STEPS = 5
+const LAST = STEPS - 1
 
 
 const blank = () => ({
@@ -37,7 +33,7 @@ const blank = () => ({
     business: '',
     current: '',
     preview: true,
-    theme: 'Dark',
+    theme: 'dark',
     pages: [],
     features: [],
     colors: { primary: '', secondary: '', accent: '' }, // empty until chosen
@@ -69,29 +65,30 @@ const blank = () => ({
 })
 
 // Bumped when the draft's shape changes, so an old draft can't feed the new form the wrong types
-const DRAFT_KEY = 'project-draft-v3'
+const DRAFT_KEY = 'project-draft-v4'
 const KIND_ALIASES = { websites: 'website', web: 'website', app: 'mobile' }
 
-/** Errors that stop you leaving a step, keyed by field. */
-function validate(step, s) {
+/** Errors that stop you leaving a step, keyed by field, in the current language. */
+function validate(step, s, t) {
   const e = {}
-  if (step === 0 && !s.kind) e.kind = 'Pick one to continue.'
+  const say = (key) => t(`contact.errors.${key}`)
+  if (step === 0 && !s.kind) e.kind = say('kind')
   if (step === 1) {
-    if (!s.title.trim()) e.title = 'Give it a short title.'
-    if (s.description.trim().length < 10) e.description = 'A sentence or two is enough, but I need something.'
+    if (!s.title.trim()) e.title = say('title')
+    if (s.description.trim().length < 10) e.description = say('description')
   }
   if (step === 2) {
-    if (s.kind === 'website' && !s.website.business.trim()) e.business = 'What’s the business called?'
+    if (s.kind === 'website' && !s.website.business.trim()) e.business = say('business')
     if (s.kind === 'components') {
       const c = s.components
-      if (!c.types.length && !c.typesOther.trim()) e.types = 'Pick at least one, or type your own.'
-      if (!c.stacks.length && !c.stackOther.trim()) e.stacks = 'Pick at least one, or type your own.'
+      if (!c.types.length && !c.typesOther.trim()) e.types = say('pickOne')
+      if (!c.stacks.length && !c.stackOther.trim()) e.stacks = say('pickOne')
     }
-    if (s.kind === 'mobile' && !s.mobile.platform) e.platform = 'Pick the platforms.'
+    if (s.kind === 'mobile' && !s.mobile.platform) e.platform = say('platform')
   }
   if (step === 3) {
-    if (!s.name.trim()) e.name = 'Please enter your name.'
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) e.email = 'Please enter a valid email.'
+    if (!s.name.trim()) e.name = say('name')
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.email.trim())) e.email = say('email')
   }
   return e
 }
@@ -123,20 +120,25 @@ function initial() {
 
   const params = new URLSearchParams(window.location.search)
   const type = KIND_ALIASES[params.get('type')] ?? params.get('type')
-  if (kindByValue[type]) {
+  if (kindIds.includes(type)) {
     s.kind = type
     // A saved budget from another type's ranges doesn't carry over
-    if (s.budget && s.budget !== 'Not sure yet' && !budgetsFor(type).includes(s.budget)) s.budget = ''
+    if (s.budget && s.budget !== BUDGET_UNSURE && !budgetsFor(type).includes(s.budget)) s.budget = ''
     if (type === 'website' && params.has('preview')) s.website.preview = params.get('preview') !== '0'
     step = 1
     reached = Math.max(reached, 1)
-    // Applied once: a reload shouldn't send you back to step 2
-    history.replaceState(history.state, '', window.location.pathname)
+    // Applied once: a reload shouldn't send you back to step 2. Other parameters (?lang=) stay.
+    const url = new URL(window.location.href)
+    url.searchParams.delete('type')
+    url.searchParams.delete('preview')
+    history.replaceState(history.state, '', url.pathname + url.search + url.hash)
   }
   return { s, step: Math.min(step, LAST), reached: Math.min(reached, LAST) }
 }
 
 export default function ContactPage() {
+  const { t, lang } = useT()
+  const steps = t('contact.steps')
   const [init] = useState(initial)
   const [s, setS] = useState(init.s)
   const [step, setStep] = useState(init.step)
@@ -203,7 +205,7 @@ export default function ContactPage() {
   const onNext = async (e) => {
     e.preventDefault()
     if (status === 'sending') return
-    const found = validate(step, s)
+    const found = validate(step, s, t)
     setErrors(found)
     if (Object.keys(found).length) {
       // Bring the first problem into view (it can be far down on a phone) once it's rendered
@@ -225,7 +227,8 @@ export default function ContactPage() {
         preview: s.kind === 'website' && s.website.preview,
         name: s.name.trim(),
         email: s.email.trim(),
-        sections: summarize(s),
+        lang,
+        sections: summarize(s, t),
       },
       { startedAt: s.startedAt },
     )
@@ -241,7 +244,7 @@ export default function ContactPage() {
   }
 
   const stepClass = { current: styles.stepCurrent, done: styles.stepDone, todo: styles.stepTodo }
-  const { label, title, intro } = STEPS[step]
+  const { label, title, intro } = steps[step]
   const Body = [TypeStep, ProjectStep, DetailsStep, YouStep, ReviewStep][step]
   const previewing = s.kind === 'website' && s.website.preview
 
@@ -249,15 +252,12 @@ export default function ContactPage() {
     <SiteLayout current="contact">
       <div ref={topRef} className={styles.layout}>
         <aside className={styles.side}>
-          <h1 className={styles.pageTitle}>Start a project</h1>
-          <p className={styles.pageIntro}>
-            A few short steps and I’ll have everything I need to give you a real answer. It takes about three
-            minutes.
-          </p>
+          <h1 className={styles.pageTitle}>{t('contact.title')}</h1>
+          <p className={styles.pageIntro}>{t('contact.intro')}</p>
 
           {status !== 'sent' && (
-            <ol className={styles.stepper} aria-label="Steps">
-              {STEPS.map((st, i) => {
+            <ol className={styles.stepper} aria-label={t('contact.stepsLabel')}>
+              {steps.map((st, i) => {
                 const state = i === step ? 'current' : i <= reached ? 'done' : 'todo'
                 return (
                   <li key={st.label}>
@@ -272,7 +272,7 @@ export default function ContactPage() {
                         {state === 'done' ? <Check size={13} strokeWidth={3} /> : i + 1}
                       </span>
                       <span className={styles.stepName}>{st.label}</span>
-                      {i === 0 && s.kind && i !== step && <span className={styles.stepValue}>{kindByValue[s.kind].title}</span>}
+                      {i === 0 && s.kind && i !== step && <span className={styles.stepValue}>{labelOf(t, 'kinds', s.kind)}</span>}
                     </button>
                   </li>
                 )
@@ -288,18 +288,14 @@ export default function ContactPage() {
                 <Check size={26} strokeWidth={3} />
               </span>
               <h2 ref={headingRef} tabIndex={-1} className={styles.stepTitle}>
-                Request sent
+                {t('contact.sent.title')}
               </h2>
-              <p className={styles.stepIntro}>
-                {previewing
-                  ? 'Thanks! I’ll look at your request, and once I accept it you’ll get a free preview of a few sections, usually within a few hours.'
-                  : 'Thanks! I’ll look at your request and reply with next steps and a quote, usually within a couple of days.'}
-              </p>
-              <p className={styles.muted}>A copy of everything you sent is on its way to {s.email}.</p>
+              <p className={styles.stepIntro}>{previewing ? t('contact.sent.preview') : t('contact.sent.quote')}</p>
+              <p className={styles.muted}>{t('contact.sent.copy', { email: s.email })}</p>
               <div className={styles.doneActions}>
-                <Button href="/">Back to home</Button>
+                <Button href="/">{t('contact.sent.home')}</Button>
                 <Button variant="secondary" onClick={restart}>
-                  Start another request
+                  {t('contact.sent.another')}
                 </Button>
               </div>
             </div>
@@ -308,17 +304,15 @@ export default function ContactPage() {
               {honeypot}
               <div className={styles.progress}>
                 <span className={styles.progressRow}>
-                  <span aria-hidden="true">
-                    Step {step + 1} of {STEPS.length} · {label}
-                  </span>
+                  <span aria-hidden="true">{t('contact.progress', { n: step + 1, total: STEPS, label })}</span>
                   {touched && (
                     <span className={styles.saved}>
-                      <Check size={13} strokeWidth={3} aria-hidden="true" /> Draft saved on this device
+                      <Check size={13} strokeWidth={3} aria-hidden="true" /> {t('contact.saved')}
                     </span>
                   )}
                 </span>
                 <span className={styles.bar}>
-                  <span className={styles.barFill} style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
+                  <span className={styles.barFill} style={{ width: `${((step + 1) / STEPS) * 100}%` }} />
                 </span>
               </div>
 
@@ -340,7 +334,7 @@ export default function ContactPage() {
               <div className={styles.nav}>
                 {step > 0 ? (
                   <Button variant="ghost" onClick={() => goTo(step - 1)} disabled={status === 'sending'}>
-                    <ArrowLeft size={17} aria-hidden="true" /> Back
+                    <ArrowLeft size={17} aria-hidden="true" /> {t('contact.back')}
                   </Button>
                 ) : (
                   <span />
@@ -348,19 +342,19 @@ export default function ContactPage() {
                 <div className={styles.navEnd}>
                   {status === 'error' && (
                     <p className={styles.error} role="alert">
-                      Something went wrong sending that. Please try again in a moment.
+                      {t('contact.failed')}
                     </p>
                   )}
                   <Button type="submit" size="l" disabled={status === 'sending'}>
                     {step < LAST ? (
                       <>
-                        Continue <ArrowRight size={17} aria-hidden="true" />
+                        {t('contact.continue')} <ArrowRight size={17} aria-hidden="true" />
                       </>
                     ) : status === 'sending' ? (
-                      'Sending…'
+                      t('contact.sending')
                     ) : (
                       <>
-                        {previewing ? 'Request free preview' : 'Send request'} <Send size={16} aria-hidden="true" />
+                        {previewing ? t('contact.sendPreview') : t('contact.send')} <Send size={16} aria-hidden="true" />
                       </>
                     )}
                   </Button>

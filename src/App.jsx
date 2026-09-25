@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
+import { I18nProvider, useT } from './i18n/index.jsx'
 import { RouterProvider, usePageFade, useRoute } from './lib/router.jsx'
 import HomePage from './pages/HomePage.jsx'
 
@@ -24,25 +25,28 @@ function chunk(importer) {
  * router (lib/router.jsx) takes them over to fade between pages instead of
  * reloading. Hosting needs a fallback that serves index.html for every path.
  * `bare` pages don't use the shared layout, so they get the fade here.
+ * `title` is a key in the language files (titles.*).
  */
 const routes = {
   '/services/websites': {
     page: chunk(() => import('./pages/websites/WebsitesPage.jsx')),
-    title: 'Website creation · Aaron Anehasse',
+    title: 'websites',
   },
-  '/contact': { page: chunk(() => import('./pages/contact/ContactPage.jsx')), title: 'Start a project · Aaron Anehasse' },
+  '/contact': { page: chunk(() => import('./pages/contact/ContactPage.jsx')), title: 'contact' },
   '/demo/lumen': {
     page: chunk(() => import('./pages/lumen/LumenPage.jsx')),
-    title: 'Lumen — bookkeeping that runs itself (demo)',
+    title: 'lumen',
     bare: true,
   },
 }
 
 export default function App() {
   return (
-    <RouterProvider preload={(path) => routes[path]?.page.load()}>
-      <Routes />
-    </RouterProvider>
+    <I18nProvider>
+      <RouterProvider preload={(path) => routes[path]?.page.load()}>
+        <Routes />
+      </RouterProvider>
+    </I18nProvider>
   )
 }
 
@@ -50,10 +54,12 @@ function Routes() {
   const { path } = useRoute()
   const fade = usePageFade()
   const route = routes[path]
+  const { t } = useT()
+  const title = t(`titles.${route?.title ?? 'home'}`)
 
   useEffect(() => {
-    document.title = route?.title ?? 'Aaron Anehasse'
-  }, [route])
+    document.title = title
+  }, [title])
 
   if (!route) return <HomePage />
   const { page, bare } = route

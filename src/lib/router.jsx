@@ -39,6 +39,12 @@ export function usePageFade() {
 }
 
 const normalise = (pathname) => pathname.replace(/\/+$/, '') || '/'
+// ?lang= only picks the language: a link that differs just by it is the same page
+const pageSearch = (search) => {
+  const params = new URLSearchParams(search)
+  params.delete('lang')
+  return params.toString()
+}
 const reducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const jump = (top) => window.scrollTo({ top, behavior: 'instant' })
@@ -144,7 +150,9 @@ export function RouterProvider({ preload, children }) {
       if (url.origin !== window.location.origin || url.pathname.startsWith('/api/')) return
 
       e.preventDefault()
-      const samePage = normalise(url.pathname) === normalise(window.location.pathname) && url.search === window.location.search
+      const samePage =
+        normalise(url.pathname) === normalise(window.location.pathname) &&
+        pageSearch(url.search) === pageSearch(window.location.search)
       if (!samePage) return go(url, { push: true })
 
       // Same page: glide to the section or the top, and keep the address bar in step

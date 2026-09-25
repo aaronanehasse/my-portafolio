@@ -1,5 +1,6 @@
 import { ArrowRight, Check } from 'lucide-react'
 import { Button, Card } from '../../components'
+import { useT } from '../../i18n/index.jsx'
 import styles from './PreviewRequest.module.css'
 
 /*
@@ -9,27 +10,17 @@ import styles from './PreviewRequest.module.css'
 
 const REQUEST_URL = '/contact?type=website&preview=1'
 
-const promises = [
-  'A real preview with 2–3 sections, made within a few hours of accepting',
-  'No commitment: if it’s not for you, you don’t pay anything',
-  'If you like it, we carry on and build the full site',
-]
-
-const asks = ['Your business and what the site should do', 'Colours, pages or sites you like, if you have them', 'Where to send the preview']
-
 export default function PreviewRequest() {
+  const { t } = useT()
   return (
     <section className={styles.request} aria-labelledby="request-title">
       <div className={styles.side}>
         <h2 id="request-title" className={styles.title}>
-          Request your free preview
+          {t('request.title')}
         </h2>
-        <p className={styles.intro}>
-          Tell me a little about your business. Once I accept the request, I’ll make you a preview within a few
-          hours.
-        </p>
+        <p className={styles.intro}>{t('request.intro')}</p>
         <ul className={styles.promises}>
-          {promises.map((p) => (
+          {t('request.promises').map((p) => (
             <li key={p}>
               <Check className={styles.check} size={18} strokeWidth={2.5} aria-hidden="true" />
               {p}
@@ -39,9 +30,9 @@ export default function PreviewRequest() {
       </div>
 
       <Card className={styles.card}>
-        <p className={styles.cardLabel}>Takes about three minutes</p>
+        <p className={styles.cardLabel}>{t('request.duration')}</p>
         <ol className={styles.asks}>
-          {asks.map((a, i) => (
+          {t('request.asks').map((a, i) => (
             <li key={a}>
               <span className={styles.num}>{i + 1}</span>
               {a}
@@ -50,9 +41,9 @@ export default function PreviewRequest() {
         </ol>
         <div className={styles.actions}>
           <Button size="l" href={REQUEST_URL}>
-            Request free preview <ArrowRight size={18} aria-hidden="true" />
+            {t('request.button')} <ArrowRight size={18} aria-hidden="true" />
           </Button>
-          <span className={styles.fine}>Free. No card, no commitment.</span>
+          <span className={styles.fine}>{t('request.fine')}</span>
         </div>
       </Card>
     </section>

@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 import { ExternalLink, Lock, X } from 'lucide-react'
 import styles from './LumenOverlay.module.css'
+import { useT } from '../../i18n/index.jsx'
 
 // Only fetched the first time someone opens it
 const LumenSite = lazy(() => import('../lumen/LumenSite.jsx'))
@@ -12,6 +13,7 @@ const LumenSite = lazy(() => import('../lumen/LumenSite.jsx'))
  * behind it for free. Clicking the backdrop closes it too.
  */
 export default function LumenOverlay({ open, onClose }) {
+  const { t } = useT()
   const dialogRef = useRef(null)
   const closeRef = useRef(null)
 
@@ -43,7 +45,7 @@ export default function LumenOverlay({ open, onClose }) {
     <dialog
       ref={dialogRef}
       className={styles.dialog}
-      aria-label="Lumen demo website"
+      aria-label={t('lumen.window')}
       onClose={onClose}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose()
@@ -63,14 +65,14 @@ export default function LumenOverlay({ open, onClose }) {
             </span>
             <a className={styles.tool} href="/demo/lumen" target="_blank" rel="noreferrer">
               <ExternalLink size={15} aria-hidden="true" />
-              <span className={styles.toolLabel}>Open in new tab</span>
+              <span className={styles.toolLabel}>{t('lumen.newTab')}</span>
             </a>
-            <button ref={closeRef} type="button" className={styles.close} onClick={onClose} aria-label="Close demo">
+            <button ref={closeRef} type="button" className={styles.close} onClick={onClose} aria-label={t('lumen.close')}>
               <X size={18} />
             </button>
           </div>
           <div className={styles.scroller} data-scroll-root>
-            <Suspense fallback={<div className={styles.loading}>Loading…</div>}>
+            <Suspense fallback={<div className={styles.loading}>{t('lumen.loading')}</div>}>
               <LumenSite />
             </Suspense>
           </div>

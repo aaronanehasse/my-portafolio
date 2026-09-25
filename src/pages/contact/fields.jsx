@@ -1,6 +1,6 @@
 import { useId, useRef, useState } from 'react'
 import { ArrowRight, Check, ChevronDown, FileText, House, Plus, X } from 'lucide-react'
-import { styles as styleOptions } from './options.js'
+import { useT } from '../../i18n/index.jsx'
 import css from './fields.module.css'
 
 /*
@@ -19,11 +19,12 @@ import css from './fields.module.css'
  *   Tabs          groups of the above, one on show at a time
  *
  * Every choice is a real radio, checkbox or select, so keyboard and screen
- * readers get native behaviour. Options are strings or { value, Icon, text }.
+ * readers get native behaviour. Options are { value, label, text?, Icon? }
+ * (see `localize` in options.js), or plain strings that are their own label.
  */
 
 const cx = (...c) => c.filter(Boolean).join(' ')
-const norm = (o) => (typeof o === 'string' ? { value: o } : o)
+const norm = (o) => (typeof o === 'string' ? { value: o, label: o } : o)
 
 function Group({ legend, hint, error, children, className }) {
   return (
@@ -44,7 +45,7 @@ function Group({ legend, hint, error, children, className }) {
 export function ChoiceCards({ name, options, value, onChange, label }) {
   return (
     <div className={css.choiceGrid} role="radiogroup" aria-label={label}>
-      {options.map(({ value: v, Icon, title, text }) => (
+      {options.map(({ value: v, Icon, label: title, text }) => (
         <label key={v} className={cx(css.choice, value === v && css.choiceOn)}>
           <input className={css.hiddenInput} type="radio" name={name} checked={value === v} onChange={() => onChange(v)} />
           <span className={css.choiceIcon}>
@@ -67,10 +68,10 @@ export function Segmented({ legend, hint, options, value, onChange, error }) {
   return (
     <Group legend={legend} hint={hint} error={error}>
       <div className={cx(css.segmented, options.length > 3 && css.segmentedFour)} style={{ '--count': options.length }}>
-        {options.map((option) => (
-          <label key={option} className={cx(css.segment, value === option && css.segmentOn)}>
-            <input className={css.hiddenInput} type="radio" name={name} checked={value === option} onChange={() => onChange(option)} />
-            {option}
+        {options.map(norm).map(({ value: v, label }) => (
+          <label key={v} className={cx(css.segment, value === v && css.segmentOn)}>
+            <input className={css.hiddenInput} type="radio" name={name} checked={value === v} onChange={() => onChange(v)} />
+            {label}
           </label>
         ))}
       </div>
@@ -84,19 +85,21 @@ export function Segmented({ legend, hint, options, value, onChange, error }) {
  * anything not listed: { value, onChange, placeholder }.
  */
 export function OptionCards({ legend, hint, options, value, onChange, multiple = false, compact = false, other, error }) {
+  const { t } = useT()
   const name = useId()
+  const list = options.map(norm)
   const selected = multiple ? value : [value]
   const toggle = (v) => {
     if (!multiple) return onChange(v)
     const next = selected.includes(v) ? selected.filter((x) => x !== v) : [...selected, v]
     // Keep the listed order, not the order they were clicked
-    onChange(options.map((o) => norm(o).value).filter((x) => next.includes(x)))
+    onChange(list.map((o) => o.value).filter((x) => next.includes(x)))
   }
 
   return (
     <Group legend={legend} hint={hint} error={error}>
       <div className={compact ? css.tiles : css.options}>
-        {options.map(norm).map(({ value: v, Icon, text }) => {
+        {list.map(({ value: v, label, Icon, text }) => {
           const on = selected.includes(v)
           return (
             <label key={v} className={cx(compact ? css.tile : css.option, on && css.optionOn)}>
@@ -113,7 +116,7 @@ export function OptionCards({ legend, hint, options, value, onChange, multiple =
                 </span>
               )}
               <span className={css.optionBody}>
-                <span className={css.optionTitle}>{v}</span>
+                <span className={css.optionTitle}>{label}</span>
                 {!compact && text && <span className={css.optionText}>{text}</span>}
               </span>
               <span className={cx(css.optionMark, multiple && css.optionMarkSquare)} aria-hidden="true">
@@ -127,8 +130,8 @@ export function OptionCards({ legend, hint, options, value, onChange, multiple =
         <input
           className={cx(css.textInput, css.otherInput)}
           value={other.value}
-          placeholder={other.placeholder ?? 'Something else? Type it here'}
-          aria-label={`${legend}: something else`}
+          placeholder={other.placeholder ?? t('contact.field.somethingElse')}
+          aria-label={t('contact.field.somethingElseLabel', { legend })}
           maxLength={200}
           onChange={(e) => other.onChange(e.target.value)}
         />
@@ -144,7 +147,7 @@ export function SwitchList({ legend, hint, options, value, onChange }) {
   return (
     <Group legend={legend} hint={hint}>
       <div className={css.switches}>
-        {options.map(({ value: v, Icon, text }) => {
+        {options.map(({ value: v, label, Icon, text }) => {
           const on = value.includes(v)
           return (
             <label key={v} className={cx(css.switchRow, on && css.switchRowOn)}>
@@ -152,7 +155,7 @@ export function SwitchList({ legend, hint, options, value, onChange }) {
                 <Icon size={18} aria-hidden="true" />
               </span>
               <span className={css.optionBody}>
-                <span className={css.optionTitle}>{v}</span>
+                <span className={css.optionTitle}>{label}</span>
                 <span className={css.optionText}>{text}</span>
               </span>
               <input className={css.hiddenInput} type="checkbox" role="switch" checked={on} onChange={() => toggle(v)} />
@@ -166,7 +169,8 @@ export function SwitchList({ legend, hint, options, value, onChange }) {
 }
 
 /** A native select, styled like the other fields. */
-export function Select({ label, hint, options, value, onChange, placeholder = 'Choose…' }) {
+export function Select({ label, hint, options, value, onChange, placeholder }) {
+  const { t } = useT()
   const id = useId()
   return (
     <div className={css.fieldset}>
@@ -176,10 +180,10 @@ export function Select({ label, hint, options, value, onChange, placeholder = 'C
       {hint && <p className={css.hint}>{hint}</p>}
       <span className={css.selectWrap}>
         <select id={id} className={cx(css.textInput, css.select, !value && css.selectEmpty)} value={value} onChange={(e) => onChange(e.target.value)}>
-          <option value="">{placeholder}</option>
-          {options.map((o) => (
-            <option key={o} value={o}>
-              {o}
+          <option value="">{placeholder ?? t('contact.field.choose')}</option>
+          {options.map(norm).map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
             </option>
           ))}
         </select>
@@ -189,17 +193,16 @@ export function Select({ label, hint, options, value, onChange, placeholder = 'C
   )
 }
 
-const NOT_SURE = 'Not sure yet'
-
 /**
  * Ordered ranges on a stepped slider. Untouched, it holds no answer (it's
- * optional); "Not sure yet" is an answer of its own.
+ * optional); `unsure` ({ value, label }) is an answer of its own.
  */
-export function BudgetSlider({ legend, hint, stops, value, onChange }) {
+export function BudgetSlider({ legend, hint, stops, unsure, value, onChange }) {
+  const { t } = useT()
   const id = useId()
-  const index = stops.indexOf(value)
+  const index = stops.findIndex((s) => s.value === value)
   const set = index >= 0
-  const unsure = value === NOT_SURE
+  const isUnsure = value === unsure.value
   const shown = set ? index : Math.floor((stops.length - 1) / 2)
 
   return (
@@ -209,7 +212,7 @@ export function BudgetSlider({ legend, hint, stops, value, onChange }) {
           {legend}
         </label>
         <output htmlFor={id} className={cx(css.budgetValue, !set && css.budgetValueEmpty)}>
-          {set ? value : unsure ? NOT_SURE : 'Drag to choose'}
+          {set ? stops[index].label : isUnsure ? unsure.label : t('contact.field.dragToChoose')}
         </output>
       </div>
       {hint && <p className={css.hint}>{hint}</p>}
@@ -221,35 +224,35 @@ export function BudgetSlider({ legend, hint, stops, value, onChange }) {
         max={stops.length - 1}
         step={1}
         value={shown}
-        disabled={unsure}
-        aria-valuetext={set ? value : 'Not chosen'}
+        disabled={isUnsure}
+        aria-valuetext={set ? stops[index].label : t('contact.field.notChosen')}
         style={{ '--fill': `${(shown / (stops.length - 1)) * 100}%` }}
-        onChange={(e) => onChange(stops[Number(e.target.value)])}
+        onChange={(e) => onChange(stops[Number(e.target.value)].value)}
         // A click on the thumb where it already rests still counts as choosing it
-        onPointerUp={(e) => !set && onChange(stops[Number(e.currentTarget.value)])}
+        onPointerUp={(e) => !set && onChange(stops[Number(e.currentTarget.value)].value)}
       />
       <div className={css.rangeLabels} aria-hidden="true">
         {stops.map((s, i) => (
-          <span key={s} className={i === index ? css.rangeLabelOn : undefined}>
-            {s}
+          <span key={s.value} className={i === index ? css.rangeLabelOn : undefined}>
+            {s.label}
           </span>
         ))}
       </div>
       <label className={css.inlineCheck}>
-        <input type="checkbox" checked={unsure} onChange={(e) => onChange(e.target.checked ? NOT_SURE : '')} />
-        Not sure yet
+        <input type="checkbox" checked={isUnsure} onChange={(e) => onChange(e.target.checked ? unsure.value : '')} />
+        {unsure.label}
       </label>
     </div>
   )
 }
 
 /** Style as type specimens: each card set in the face it stands for. */
-export function StylePicker({ legend, hint, value, onChange }) {
+export function StylePicker({ legend, hint, options, value, onChange }) {
   const name = useId()
   return (
     <Group legend={legend} hint={hint}>
       <div className={css.specimens}>
-        {styleOptions.map((s) => (
+        {options.map((s) => (
           <label key={s.value} className={cx(css.specimen, value === s.value && css.optionOn)}>
             <input
               className={css.hiddenInput}
@@ -265,7 +268,7 @@ export function StylePicker({ legend, hint, value, onChange }) {
             >
               Aa
             </span>
-            <span className={css.optionTitle}>{s.value}</span>
+            <span className={css.optionTitle}>{s.label}</span>
             <span className={css.optionText}>{s.text}</span>
           </label>
         ))}
@@ -276,11 +279,13 @@ export function StylePicker({ legend, hint, value, onChange }) {
 
 /** The site's pages as a list you build: Home is always there, the rest added from suggestions or typed. */
 export function PageList({ legend, hint, value, onChange, suggestions }) {
+  const { t } = useT()
   const [draft, setDraft] = useState('')
+  const home = t('contact.field.home')
   const has = (p) => value.some((v) => v.toLowerCase() === p.toLowerCase())
   const add = (p) => {
     const page = p.trim()
-    if (page && !has(page) && page.toLowerCase() !== 'home') onChange([...value, page])
+    if (page && !has(page) && page.toLowerCase() !== home.toLowerCase()) onChange([...value, page])
   }
 
   return (
@@ -288,14 +293,19 @@ export function PageList({ legend, hint, value, onChange, suggestions }) {
       <ol className={css.pages}>
         <li className={css.page}>
           <House size={16} className={css.pageIcon} aria-hidden="true" />
-          Home
-          <span className={css.pageNote}>Always included</span>
+          {home}
+          <span className={css.pageNote}>{t('contact.field.alwaysIncluded')}</span>
         </li>
         {value.map((p) => (
           <li key={p} className={css.page}>
             <FileText size={16} className={css.pageIcon} aria-hidden="true" />
             {p}
-            <button type="button" className={css.iconButton} onClick={() => onChange(value.filter((v) => v !== p))} aria-label={`Remove ${p}`}>
+            <button
+              type="button"
+              className={css.iconButton}
+              onClick={() => onChange(value.filter((v) => v !== p))}
+              aria-label={t('contact.field.remove', { name: p })}
+            >
               <X size={15} aria-hidden="true" />
             </button>
           </li>
@@ -305,8 +315,8 @@ export function PageList({ legend, hint, value, onChange, suggestions }) {
         <input
           className={css.textInput}
           value={draft}
-          placeholder="Add a page"
-          aria-label="Add a page"
+          placeholder={t('contact.field.addPage')}
+          aria-label={t('contact.field.addPage')}
           maxLength={40}
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
@@ -326,12 +336,12 @@ export function PageList({ legend, hint, value, onChange, suggestions }) {
             setDraft('')
           }}
         >
-          <Plus size={16} aria-hidden="true" /> Add
+          <Plus size={16} aria-hidden="true" /> {t('contact.field.add')}
         </button>
       </div>
       {suggestions.some((s) => !has(s)) && (
         <div className={css.suggestions}>
-          <span className={css.suggestionsLabel}>Common:</span>
+          <span className={css.suggestionsLabel}>{t('contact.field.common')}</span>
           {suggestions
             .filter((s) => !has(s))
             .map((s) => (
@@ -350,6 +360,7 @@ const HEX = /^#[0-9a-f]{6}$/i
 
 /** A colour swatch (the native picker) next to its hex code, which can be typed too. */
 export function ColorField({ label, value, onChange, onRemove }) {
+  const { t } = useT()
   const id = useId()
   const [text, setText] = useState(value)
   const [lastValue, setLastValue] = useState(value)
@@ -369,7 +380,7 @@ export function ColorField({ label, value, onChange, onRemove }) {
           // The picker needs a colour to open on; nothing is chosen until they pick
           value={value || '#8a8f98'}
           onChange={(e) => onChange(e.target.value)}
-          aria-label={`${label} colour picker`}
+          aria-label={t('contact.field.colorPicker', { name: label })}
         />
       </label>
       <div className={css.colorText}>
@@ -380,7 +391,7 @@ export function ColorField({ label, value, onChange, onRemove }) {
           id={id}
           className={css.colorHex}
           value={text}
-          placeholder="Choose"
+          placeholder={t('contact.field.colorEmpty')}
           spellCheck={false}
           maxLength={7}
           onChange={(e) => {
@@ -393,7 +404,7 @@ export function ColorField({ label, value, onChange, onRemove }) {
         />
       </div>
       {onRemove && (
-        <button type="button" className={css.iconButton} onClick={onRemove} aria-label={`Remove ${label}`}>
+        <button type="button" className={css.iconButton} onClick={onRemove} aria-label={t('contact.field.remove', { name: label })}>
           <X size={16} aria-hidden="true" />
         </button>
       )}
@@ -403,6 +414,7 @@ export function ColorField({ label, value, onChange, onRemove }) {
 
 /** A growing list of links, one input each. */
 export function LinkList({ label, hint, value, onChange, placeholder = 'https://' }) {
+  const { t } = useT()
   const rows = value.length ? value : ['']
   const set = (i, v) => onChange(rows.map((r, j) => (j === i ? v : r)))
 
@@ -425,7 +437,7 @@ export function LinkList({ label, hint, value, onChange, placeholder = 'https://
                 type="button"
                 className={css.iconButton}
                 onClick={() => onChange(rows.filter((_, j) => j !== i))}
-                aria-label={`Remove link ${i + 1}`}
+                aria-label={t('contact.field.removeLink', { n: i + 1 })}
               >
                 <X size={16} aria-hidden="true" />
               </button>
@@ -435,7 +447,7 @@ export function LinkList({ label, hint, value, onChange, placeholder = 'https://
       </div>
       {rows.length < 6 && (
         <button type="button" className={css.textButton} onClick={() => onChange([...rows, ''])}>
-          <Plus size={15} aria-hidden="true" /> Add another link
+          <Plus size={15} aria-hidden="true" /> {t('contact.field.addLink')}
         </button>
       )}
     </Group>
@@ -463,14 +475,16 @@ export function CheckCard({ checked, onChange, title, text, Icon }) {
 
 /**
  * Tabs over a set of panels, so a long group of questions shows one part at a
- * time. `filled[id]` puts a count (a number) or a check (true) on a tab once
- * something in it is answered. Arrow keys, Home and End move between tabs.
+ * time. `tabs` is [{ id, title }]. `filled[id]` puts a count (a number) or a
+ * check (true) on a tab once something in it is answered. Arrow keys, Home
+ * and End move between tabs.
  */
 export function Tabs({ label, tabs, filled = {}, panels }) {
+  const { t } = useT()
   const base = useId()
   const [active, setActive] = useState(tabs[0].id)
   const tabRefs = useRef({})
-  const index = tabs.findIndex((t) => t.id === active)
+  const index = tabs.findIndex((tab) => tab.id === active)
   const next = tabs[index + 1]
 
   const select = (id, focus = false) => {
@@ -499,27 +513,27 @@ export function Tabs({ label, tabs, filled = {}, panels }) {
   return (
     <div className={css.tabs}>
       <div role="tablist" aria-label={label} className={css.tabList} onKeyDown={onKeyDown}>
-        {tabs.map((t) => {
-          const on = t.id === active
-          const mark = filled[t.id]
+        {tabs.map((tab) => {
+          const on = tab.id === active
+          const mark = filled[tab.id]
           return (
             <button
-              key={t.id}
+              key={tab.id}
               ref={(el) => {
-                tabRefs.current[t.id] = el
+                tabRefs.current[tab.id] = el
               }}
               type="button"
               role="tab"
-              id={`${base}-${t.id}`}
+              id={`${base}-${tab.id}`}
               aria-selected={on}
               aria-controls={`${base}-panel`}
               tabIndex={on ? 0 : -1}
               className={cx(css.tab, on && css.tabOn)}
-              onClick={() => select(t.id)}
+              onClick={() => select(tab.id)}
             >
-              {t.title}
+              {tab.title}
               {mark ? (
-                <span className={css.tabMark} aria-label={mark === true ? '(filled in)' : `(${mark})`}>
+                <span className={css.tabMark} aria-label={mark === true ? t('contact.field.filledIn') : `(${mark})`}>
                   {mark === true ? <Check size={11} strokeWidth={3.5} aria-hidden="true" /> : mark}
                 </span>
               ) : null}
@@ -531,7 +545,7 @@ export function Tabs({ label, tabs, filled = {}, panels }) {
         {panels[active]}
         {next && (
           <button type="button" className={css.nextTab} onClick={() => select(next.id, true)}>
-            Next: {next.title} <ArrowRight size={15} aria-hidden="true" />
+            {t('contact.field.next', { name: next.title })} <ArrowRight size={15} aria-hidden="true" />
           </button>
         )}
       </div>

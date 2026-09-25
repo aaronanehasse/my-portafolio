@@ -1,28 +1,18 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Button, ClothField, DeckEmbers, Tag } from '../../components'
+import { useT } from '../../i18n/index.jsx'
 import BuildShowcase from './BuildShowcase.jsx'
 import styles from './Hero.module.css'
 
 /**
  * Top-of-page hero: intro text on the left, a half-body cutout on the right.
  * Put your transparent PNG/WebP at public/hero.png (or pass `image`).
+ * The words are in the language files (hero.*).
  */
-export default function Hero({
-  name = 'Aaron Anehasse',
-  role = 'User interface designer & full-stack developer',
-  intro = (
-    <>
-      In an era where everyone can use AI to build software, the human factor, the attention to
-      detail and natural experience are a requirement for any enterprise-grade product.
-      <br />
-      <br />
-      I help companies build software that is not only functional, but also delightful to use. The future of software is human-centered
-    </>
-  ),
-  image = '/hero.png',
-  status = 'Available for freelance work',
-}) {
+export default function Hero({ name = 'Aaron Anehasse', image = '/hero.png' }) {
+  const { t } = useT()
   const [imageMissing, setImageMissing] = useState(false)
+  const status = t('hero.status')
 
   return (
     <section className={styles.hero} aria-labelledby="hero-title">
@@ -30,13 +20,29 @@ export default function Hero({
       <div className={styles.text}>
         {status && <Tag variant="accent">{status}</Tag>}
         <h1 id="hero-title" className={styles.title}>
-          Hi, I&apos;m <span className={styles.name}>{name}</span>
+          {t('hero.title', { name: <span className={styles.name}>{name}</span> })}
         </h1>
-        <p className={styles.role}>{role}</p>
-        <p className={styles.intro}>{intro}</p>
+        <p className={styles.role}>{t('hero.role')}</p>
+        <p className={styles.intro}>
+          {t('hero.intro').map((paragraph, i) => (
+            <Fragment key={i}>
+              {i > 0 && (
+                <>
+                  <br />
+                  <br />
+                </>
+              )}
+              {paragraph}
+            </Fragment>
+          ))}
+        </p>
         <div className={styles.actions}>
-          <Button size="l" href="#projects">See my work</Button>
-          <Button variant="secondary" size="l" href="/contact">Get in touch</Button>
+          <Button size="l" href="#projects">
+            {t('hero.seeWork')}
+          </Button>
+          <Button variant="secondary" size="l" href="/contact">
+            {t('hero.contact')}
+          </Button>
         </div>
       </div>
 
@@ -46,14 +52,14 @@ export default function Hero({
         <div className={styles.glow} aria-hidden="true" />
         {imageMissing ? (
           <div className={styles.placeholder}>
-            Add your photo at
+            {t('hero.photoMissing')}
             <code>public/hero.png</code>
           </div>
         ) : (
           <img
             className={styles.image}
             src={image}
-            alt={`Portrait of ${name}`}
+            alt={t('hero.portrait', { name })}
             onError={() => setImageMissing(true)}
           />
         )}

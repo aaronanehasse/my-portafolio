@@ -1,4 +1,5 @@
 import {
+  AppWindow,
   AtSign,
   Bell,
   Blocks,
@@ -34,153 +35,145 @@ import {
   TextCursorInput,
   UserRound,
   WifiOff,
-  AppWindow,
   Wrench,
 } from 'lucide-react'
 
 /*
- * Everything the project setup offers to pick from. Edit the lists here; the
- * steps, the review and the email all read from them. `value` is what's
- * stored and emailed; `text` is the one line of help under it.
+ * What the project setup offers to pick from: ids (and icons) only. Answers
+ * are stored as these ids, so a draft and the email don't depend on the
+ * language. Each id's words live in the language files, under
+ * contact.o.<group>.<id> (see src/i18n/locales/en.jsx); `localize` joins the two.
  */
 
-export const kinds = [
-  { value: 'website', Icon: Globe, title: 'Website', text: 'A full website for your business, designed and built.' },
-  { value: 'components', Icon: Blocks, title: 'Components', text: 'Components, animations or interactive sets for your stack.' },
-  { value: 'mobile', Icon: Smartphone, title: 'Mobile app', text: 'An iOS and Android app from one codebase.' },
-  { value: 'other', Icon: Sparkles, title: 'Something else', text: 'Not on the list? Explain exactly what you need.' },
-]
-
-export const kindByValue = Object.fromEntries(kinds.map((k) => [k.value, k]))
-
-// Step 2 wording, per kind
-export const projectCopy = {
-  website: {
-    title: 'Website for Northfield Coffee',
-    description: 'What the business does, who the site is for, and what it should help people do…',
-  },
-  components: {
-    title: 'Animated pricing table',
-    description: 'What the components are for, where they’ll live, and how they should behave…',
-  },
-  mobile: {
-    title: 'Booking app for our gym',
-    description: 'What the app does, who uses it, and the main things they should be able to do…',
-  },
-  other: {
-    title: 'Give it a short name',
-    description: 'Explain exactly what you need. The more detail, the better the reply…',
-  },
+/** A list of { id, Icon } as options for the controls, labelled in the current language. */
+export function localize(t, group, list) {
+  return list.map((item) => {
+    const { id, Icon, ...rest } = typeof item === 'string' ? { id: item } : item
+    const words = t(`contact.o.${group}.${id}`)
+    const { label, text } = typeof words === 'string' ? { label: words } : words
+    return { value: id, label, text, Icon, ...rest }
+  })
 }
+
+/** The words for one stored id, for the review and the email. */
+export const labelOf = (t, group, id) => {
+  const words = t(`contact.o.${group}.${id}`)
+  return typeof words === 'string' ? words : words.label
+}
+
+export const kinds = [
+  { id: 'website', Icon: Globe },
+  { id: 'components', Icon: Blocks },
+  { id: 'mobile', Icon: Smartphone },
+  { id: 'other', Icon: Sparkles },
+]
+export const kindIds = kinds.map((k) => k.id)
 
 /* ---- Website ---- */
 
 // The page builder's tabs, in order
-export const websiteTabs = [
-  { id: 'pages', title: 'Pages' },
-  { id: 'features', title: 'Features' },
-  { id: 'look', title: 'Look' },
-  { id: 'content', title: 'Content' },
-  { id: 'hosting', title: 'Hosting' },
-]
-
-export const suggestedPages = ['About', 'Services', 'Pricing', 'Menu', 'Gallery', 'Blog', 'Contact', 'Shop', 'Booking', 'FAQ']
+export const websiteTabs = ['pages', 'features', 'look', 'content', 'hosting']
 
 export const websiteFeatures = [
-  { value: 'Online store', Icon: ShoppingBag, text: 'Sell products with checkout and payments' },
-  { value: 'Bookings & appointments', Icon: CalendarCheck, text: 'Let customers book a time online' },
-  { value: 'Blog or news', Icon: Newspaper, text: 'Posts you can write and publish yourself' },
-  { value: 'Contact form', Icon: Mail, text: 'Messages straight to your inbox' },
-  { value: 'Newsletter signup', Icon: MailPlus, text: 'Grow a mailing list' },
-  { value: 'Multiple languages', Icon: Languages, text: 'The site in more than one language' },
-  { value: 'Customer accounts', Icon: UserRound, text: 'Sign in, orders, saved details' },
-  { value: 'Maps & opening hours', Icon: MapPin, text: 'Help people find and visit you' },
+  { id: 'store', Icon: ShoppingBag },
+  { id: 'booking', Icon: CalendarCheck },
+  { id: 'blog', Icon: Newspaper },
+  { id: 'contactForm', Icon: Mail },
+  { id: 'newsletter', Icon: MailPlus },
+  { id: 'languages', Icon: Languages },
+  { id: 'accounts', Icon: UserRound },
+  { id: 'maps', Icon: MapPin },
 ]
 
 // Each style is shown as a type specimen in its own face
 export const styles = [
-  { value: 'Minimal', font: 'system-ui, sans-serif', weight: 300, text: 'Quiet, lots of space' },
-  { value: 'Bold', font: 'system-ui, sans-serif', weight: 850, text: 'Big type, strong contrast' },
-  { value: 'Elegant', font: 'Georgia, "Times New Roman", serif', weight: 400, italic: true, text: 'Refined, editorial' },
-  { value: 'Playful', font: '"Trebuchet MS", ui-rounded, sans-serif', weight: 700, text: 'Friendly and round' },
-  { value: 'Warm', font: '"Palatino Linotype", Palatino, Georgia, serif', weight: 600, text: 'Inviting, a little classic' },
-  { value: 'Techy', font: 'ui-monospace, "Cascadia Code", Consolas, monospace', weight: 500, text: 'Precise, product-like' },
+  { id: 'minimal', font: 'system-ui, sans-serif', weight: 300 },
+  { id: 'bold', font: 'system-ui, sans-serif', weight: 850 },
+  { id: 'elegant', font: 'Georgia, "Times New Roman", serif', weight: 400, italic: true },
+  { id: 'playful', font: '"Trebuchet MS", ui-rounded, sans-serif', weight: 700 },
+  { id: 'warm', font: '"Palatino Linotype", Palatino, Georgia, serif', weight: 600 },
+  { id: 'techy', font: 'ui-monospace, "Cascadia Code", Consolas, monospace', weight: 500 },
 ]
-export const styleByValue = Object.fromEntries(styles.map((s) => [s.value, s]))
+export const styleById = Object.fromEntries(styles.map((s) => [s.id, s]))
 
-export const logoOptions = ['I have one', 'I need one', 'Not sure']
-export const textOptions = ['I have it', 'Help me write it']
-export const photoOptions = ['I have them', 'I need them']
+export const logoOptions = ['have', 'need', 'unsure']
+export const textOptions = ['have', 'help']
+export const photoOptions = ['have', 'need']
 
 export const careOptions = [
-  { value: 'Register a domain', Icon: Globe, text: 'Find and register your .com (or similar)' },
-  { value: 'Hosting', Icon: Server, text: 'Fast, secure hosting, looked after for you' },
-  { value: 'Ongoing maintenance', Icon: Wrench, text: 'Updates, fixes and small changes each month' },
-  { value: 'Business email', Icon: AtSign, text: 'you@yourbusiness.com addresses' },
+  { id: 'domain', Icon: Globe },
+  { id: 'hosting', Icon: Server },
+  { id: 'maintenance', Icon: Wrench },
+  { id: 'email', Icon: AtSign },
 ]
+
+export const themes = ['dark', 'light']
 
 /* ---- Components ---- */
 
 export const componentTypes = [
-  { value: 'Buttons & inputs', Icon: MousePointerClick },
-  { value: 'Forms', Icon: TextCursorInput },
-  { value: 'Navigation & menus', Icon: Menu },
-  { value: 'Modals & dialogs', Icon: AppWindow },
-  { value: 'Tables & lists', Icon: Table },
-  { value: 'Charts & data', Icon: ChartLine },
-  { value: 'Cards & layouts', Icon: LayoutGrid },
-  { value: 'Landing page sections', Icon: LayoutTemplate },
-  { value: 'Animations & micro-interactions', Icon: Sparkles },
-  { value: 'Animated icons & logos', Icon: Shapes },
-  { value: 'A full design system', Icon: Layers },
+  { id: 'buttons', Icon: MousePointerClick },
+  { id: 'forms', Icon: TextCursorInput },
+  { id: 'navigation', Icon: Menu },
+  { id: 'modals', Icon: AppWindow },
+  { id: 'tables', Icon: Table },
+  { id: 'charts', Icon: ChartLine },
+  { id: 'cards', Icon: LayoutGrid },
+  { id: 'sections', Icon: LayoutTemplate },
+  { id: 'animations', Icon: Sparkles },
+  { id: 'animatedIcons', Icon: Shapes },
+  { id: 'designSystem', Icon: Layers },
 ]
 
+// Framework names are the same in every language, so they're their own labels
 export const stacks = ['React', 'Next.js', 'Vue', 'Nuxt', 'Svelte', 'Angular', 'React Native', 'Web Components']
-export const stylingOptions = ['CSS Modules', 'Tailwind', 'styled-components / Emotion', 'Plain CSS', 'Match my codebase']
-export const languageOptions = ['TypeScript', 'JavaScript', 'Either']
-export const componentScope = ['One', 'A few (2–5)', 'A library']
+export const stylingOptions = ['cssModules', 'tailwind', 'cssInJs', 'plainCss', 'matchCodebase']
+export const codeLanguages = ['ts', 'js', 'either']
+export const componentScope = ['one', 'few', 'library']
 
 export const designOptions = [
-  { value: 'I have designs', Icon: PenTool, text: 'Figma or similar; I build them faithfully' },
-  { value: 'Design it for me', Icon: Palette, text: 'I design and build them' },
-  { value: 'Match my existing style', Icon: Copy, text: 'Fit in with what you already have' },
+  { id: 'have', Icon: PenTool },
+  { id: 'forMe', Icon: Palette },
+  { id: 'match', Icon: Copy },
 ]
 
 /* ---- Mobile ---- */
 
-export const platforms = ['iOS & Android', 'iOS', 'Android']
+export const platforms = ['both', 'ios', 'android']
 
 export const appStage = [
-  { value: 'A new app', Icon: Sparkles, text: 'Starting from scratch' },
-  { value: 'Improve an existing app', Icon: Wrench, text: 'New features or fixes' },
-  { value: 'Rebuild an existing app', Icon: RefreshCw, text: 'Start over, properly' },
+  { id: 'new', Icon: Sparkles },
+  { id: 'improve', Icon: Wrench },
+  { id: 'rebuild', Icon: RefreshCw },
 ]
 
 export const appFeatures = [
-  { value: 'Accounts & login', Icon: KeyRound, text: 'Sign up, sign in, profiles' },
-  { value: 'Payments', Icon: CreditCard, text: 'In-app purchases or card payments' },
-  { value: 'Push notifications', Icon: Bell, text: 'Reach people outside the app' },
-  { value: 'Maps & location', Icon: MapPin, text: 'Maps, directions, nearby places' },
-  { value: 'Chat & messaging', Icon: MessageCircle, text: 'Conversations between users' },
-  { value: 'Camera & media', Icon: Camera, text: 'Photos, video, uploads' },
-  { value: 'Works offline', Icon: WifiOff, text: 'Usable without a connection' },
-  { value: 'Admin dashboard', Icon: LayoutDashboard, text: 'Manage content and users on the web' },
+  { id: 'accounts', Icon: KeyRound },
+  { id: 'payments', Icon: CreditCard },
+  { id: 'push', Icon: Bell },
+  { id: 'maps', Icon: MapPin },
+  { id: 'chat', Icon: MessageCircle },
+  { id: 'camera', Icon: Camera },
+  { id: 'offline', Icon: WifiOff },
+  { id: 'admin', Icon: LayoutDashboard },
 ]
 
-export const appDesign = ['I have designs', 'Design it for me']
-export const appBackend = ['I have one', 'I need one', 'Not sure']
+export const appDesign = ['have', 'forMe']
+export const appBackend = ['have', 'need', 'unsure']
 
 export const appExtras = [
-  { value: 'App Store & Play Store publishing', Icon: Store, text: 'Listings, review and release' },
-  { value: 'Ongoing maintenance', Icon: Wrench, text: 'OS updates, fixes and improvements' },
+  { id: 'stores', Icon: Store },
+  { id: 'maintenance', Icon: Wrench },
 ]
 
 /* ---- Every kind ---- */
 
-export const timelines = ['As soon as possible', 'Within a month', 'In 1–3 months', 'I’m flexible']
+export const timelines = ['asap', 'month', 'quarter', 'flexible']
+
 // The budget slider's stops, low to high. Websites start at €450, the lowest price for one.
 const budgetStops = {
-  website: ['€450–1k', '€1k–3k', '€3k–7k', '€7k–15k', '€15k+'],
-  default: ['Under €1k', '€1k–3k', '€3k–7k', '€7k–15k', '€15k+'],
+  website: ['450-1k', '1k-3k', '3k-7k', '7k-15k', '15k+'],
+  default: ['under-1k', '1k-3k', '3k-7k', '7k-15k', '15k+'],
 }
 export const budgetsFor = (kind) => budgetStops[kind] ?? budgetStops.default
+export const BUDGET_UNSURE = 'unsure'
