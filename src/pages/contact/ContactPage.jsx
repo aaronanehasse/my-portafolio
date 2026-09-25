@@ -29,6 +29,7 @@ const LAST = STEPS.length - 1
 
 
 const blank = () => ({
+  startedAt: Date.now(), // when this request was begun; kept with the draft (see useFormSender)
   kind: '',
   title: '',
   description: '',
@@ -113,6 +114,8 @@ function initial() {
         components: { ...fresh.components, ...saved.s.components },
         mobile: { ...fresh.mobile, ...saved.s.mobile },
         other: { ...fresh.other, ...saved.s.other },
+        // A draft saved before start times were kept was begun earlier than now, whenever that was
+        startedAt: saved.s.startedAt ?? 0,
       }
     : fresh
   let step = saved?.step ?? 0
@@ -215,14 +218,17 @@ export default function ContactPage() {
     if (step < LAST) return goTo(step + 1)
 
     moved.current = true
-    await send({
-      kind: s.kind,
-      title: s.title.trim(),
-      preview: s.kind === 'website' && s.website.preview,
-      name: s.name.trim(),
-      email: s.email.trim(),
-      sections: summarize(s),
-    })
+    await send(
+      {
+        kind: s.kind,
+        title: s.title.trim(),
+        preview: s.kind === 'website' && s.website.preview,
+        name: s.name.trim(),
+        email: s.email.trim(),
+        sections: summarize(s),
+      },
+      { startedAt: s.startedAt },
+    )
   }
 
   const restart = () => {

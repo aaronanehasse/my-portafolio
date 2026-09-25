@@ -86,7 +86,18 @@ async function sendEmail(message) {
     },
     body: JSON.stringify(message),
   })
-  if (!res.ok) throw new Error(`Resend ${res.status}: ${await res.text()}`)
+  if (!res.ok) {
+    const body = await res.text()
+    const err = new Error(`Resend ${res.status}: ${body}`)
+    // Resend's own one-line reason ("The domain is not verified…"), safe to show:
+    // it describes the setup, never the key
+    try {
+      err.reason = `${res.status}: ${JSON.parse(body).message}`
+    } catch {
+      err.reason = `${res.status}`
+    }
+    throw err
+  }
 }
 
 export default async function handler(req, res) {
@@ -132,7 +143,7 @@ export default async function handler(req, res) {
     })
   } catch (err) {
     console.error('contact: sending to you failed', err)
-    return res.status(502).json({ error: 'Couldn’t send right now.' })
+    return res.status(502).json({ error: 'Couldn’t send right now.', reason: err.reason })
   }
 
   // The auto-reply is a courtesy: if it fails, the request still arrived.

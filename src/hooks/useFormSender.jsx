@@ -15,8 +15,14 @@ export default function useFormSender(type) {
     openedAt.current = Date.now()
   }, [])
 
-  const send = async (data) => {
+  /**
+   * `startedAt` (ms): when the person began this form, if earlier than this
+   * page load. A draft restored straight onto its last step can be sent within
+   * seconds of loading; timed from the load alone, that looked like a bot.
+   */
+  const send = async (data, { startedAt } = {}) => {
     setStatus('sending')
+    const began = Math.min(openedAt.current || Date.now(), startedAt ?? Infinity)
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
@@ -25,7 +31,7 @@ export default function useFormSender(type) {
           ...data,
           type,
           trap: trap.current?.value ?? '',
-          elapsed: Date.now() - openedAt.current,
+          elapsed: Date.now() - began,
         }),
       })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
