@@ -106,7 +106,14 @@ export default async function handler(req, res) {
 
   // Spam: the hidden field is filled, or it came back too fast. Answer as if it
   // worked, so the bot has nothing to learn from.
-  if (body.fax || Number(body.elapsed) < MIN_FILL_MS) return res.status(200).json({ ok: true })
+  // Logged, so a real person caught by mistake shows up in the Vercel logs
+  // instead of vanishing.
+  const trapped = Boolean(body.trap || body.fax)
+  const tooFast = Number(body.elapsed) < MIN_FILL_MS
+  if (trapped || tooFast) {
+    console.warn('contact: dropped as spam', { trapped, elapsed: body.elapsed })
+    return res.status(200).json({ ok: true })
+  }
 
   const request = parse(body)
   if (request.error) return res.status(400).json({ error: request.error })

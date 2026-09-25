@@ -24,7 +24,7 @@ export default function useFormSender(type) {
         body: JSON.stringify({
           ...data,
           type,
-          fax: trap.current?.value ?? '',
+          trap: trap.current?.value ?? '',
           elapsed: Date.now() - openedAt.current,
         }),
       })
@@ -37,15 +37,13 @@ export default function useFormSender(type) {
     }
   }
 
+  // Not rendered at all (display: none), with a name and no label that browser
+  // autofill can't place: an off-screen field called "fax" was being filled in
+  // by autofill, which silently dropped real people's requests as spam.
+  // Bots that fill every input in the markup still fall for it.
   const honeypot = (
-    <div
-      aria-hidden="true"
-      style={{ position: 'absolute', left: '-10000px', width: 1, height: 1, overflow: 'hidden' }}
-    >
-      <label>
-        Fax
-        <input ref={trap} type="text" name="fax" tabIndex={-1} autoComplete="off" defaultValue="" />
-      </label>
+    <div aria-hidden="true" style={{ display: 'none' }}>
+      <input ref={trap} type="text" name="hp_ref_x7" tabIndex={-1} autoComplete="off" defaultValue="" />
     </div>
   )
 
