@@ -1,0 +1,512 @@
+/* ---- Page: sticky intro and stepper on the left, the step on the right ---- */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) 2fr;
+  align-items: start;
+  gap: 56px;
+  padding-top: clamp(24px, 6vh, 64px);
+}
+
+.side {
+  position: sticky;
+  top: 104px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pageTitle {
+  font-size: clamp(32px, 4.5vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+.pageIntro {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.muted {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.error {
+  color: var(--danger-text);
+  font-size: 14px;
+}
+
+/* ---- Stepper ---- */
+
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stepLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: var(--r-m);
+  background: transparent;
+  color: var(--text-faint);
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--t-fade) var(--ease-out),
+    color var(--t-fade) var(--ease-out);
+}
+
+.stepLink:disabled {
+  cursor: default;
+}
+
+.stepLink:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.stepDone:not(:disabled):hover {
+  background: var(--raise-1);
+  color: var(--text);
+}
+
+.stepCurrent {
+  background: var(--raise-1);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.stepTodo {
+  opacity: 0.6;
+}
+
+.stepDot {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--raise-2);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stepCurrent .stepDot {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.stepDone .stepDot {
+  background: var(--tint-strong);
+  color: var(--accent);
+}
+
+.stepName {
+  flex: none;
+}
+
+.stepValue {
+  overflow: hidden;
+  margin-left: auto;
+  color: var(--text-faint);
+  font-size: 13px;
+  font-weight: 400;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ---- The step card ---- */
+
+.card {
+  min-width: 0;
+  padding: 36px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--text-faint);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.progressRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 400;
+  animation: stepIn 360ms var(--ease-out) both;
+}
+
+.bar {
+  display: block;
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--r-pill);
+  background: var(--raise-2);
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 480ms var(--ease-out);
+}
+
+.stepBody {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  animation: stepIn 360ms var(--ease-out) both;
+}
+
+.stepBody[data-direction='back'] {
+  animation-name: stepBack;
+}
+
+@keyframes stepIn {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+}
+
+@keyframes stepBack {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
+.stepHead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stepTitle {
+  font-size: clamp(24px, 3vw, 30px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.stepTitle:focus {
+  outline: none;
+}
+
+.stepIntro {
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: var(--hairline);
+}
+
+.navEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  text-align: right;
+}
+
+/* ---- Website detail blocks ---- */
+
+.plainFieldset {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+/* Matches the controls' legends (fields.module.css) */
+.blockLegend {
+  padding: 0;
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* The page builder: a sunken panel holding the sketch and the tabs */
+.builder {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 22px;
+  border-radius: var(--r-card);
+  background: var(--sunken);
+  box-shadow: var(--outline-soft);
+}
+
+.builderHead {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.blocksTitle {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+}
+
+.colors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.addColor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 64px;
+  border: var(--dashed);
+  border-width: 1.5px;
+  border-radius: var(--r-item);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addColor:hover {
+  background: var(--raise-1);
+  color: var(--text);
+}
+
+/* ---- Review ---- */
+
+.review {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewSection {
+  padding: 18px 20px;
+  border-radius: var(--r-item);
+  background: var(--raise-1);
+  box-shadow: var(--outline-soft);
+}
+
+.reviewHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.reviewTitle {
+  font-size: 16px;
+}
+
+.edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--r-s);
+  background: transparent;
+  color: var(--text-faint);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit:hover {
+  background: var(--raise-2);
+  color: var(--text);
+}
+
+.reviewRows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.reviewRow {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  padding: 9px 0;
+  border-top: var(--hairline);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.reviewRow:first-child {
+  border-top: none;
+}
+
+.reviewRow dt {
+  color: var(--text-faint);
+}
+
+.reviewRow dd {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.reviewSwatch {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  border-radius: 5px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+/* ---- Sent ---- */
+
+.done {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 24px 0 8px;
+  animation: stepIn 360ms var(--ease-out) both;
+}
+
+.doneIcon {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.doneActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+/* ---- Smaller screens: the stepper becomes the progress bar above ---- */
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .side {
+    position: static;
+  }
+
+  .stepper {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 22px;
+  }
+
+  .builder {
+    margin: 0 -8px;
+    padding: 16px 14px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .reviewRow {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepBody,
+  .done {
+    animation-name: fadeIn;
+  }
+
+  .stepBody[data-direction='back'] {
+    animation-name: fadeIn;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}

@@ -1,0 +1,23 @@
+/* Page change: the old page fades out, the new one fades in on mount */
+
+/* Even, not ease-out: that curve does most of a fade in the first frames and reads as a pop */
+.enter {
+  animation: pageIn 480ms cubic-bezier(0.45, 0, 0.35, 1) both;
+}
+
+.leave {
+  animation: pageOut 240ms ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes pageOut {
+  to {
+    opacity: 0;
+  }
+}

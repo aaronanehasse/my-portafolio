@@ -36,7 +36,7 @@ export default function Hero({
         <p className={styles.intro}>{intro}</p>
         <div className={styles.actions}>
           <Button size="l" href="#projects">See my work</Button>
-          <Button variant="secondary" size="l" href="#contact">Get in touch</Button>
+          <Button variant="secondary" size="l" href="/contact">Get in touch</Button>
         </div>
       </div>
 

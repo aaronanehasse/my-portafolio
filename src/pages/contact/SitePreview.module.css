@@ -1,0 +1,380 @@
+/* A mock website inside a small browser window, dark or light. Colours ease
+   between answers so a change reads as the site updating, not a redraw. */
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* The mock site's own palette, per theme */
+.window[data-theme='dark'] {
+  --bg: #121315;
+  --chrome: #0b0c0d;
+  --dot: #34363a;
+  --url-bg: #1c1e21;
+  --url-ink: #8b8e94;
+  --ink: #f1f1ef;
+  --muted: #9a9ca1;
+  --line: #2a2c30;
+  --card: #1a1b1e;
+  --edge: #26282b;
+}
+
+.window[data-theme='light'] {
+  --bg: #fbfbf9;
+  --chrome: #ecebe7;
+  --dot: #cfcdc7;
+  --url-bg: #fff;
+  --url-ink: #8a8a85;
+  --ink: #1c1c1c;
+  --muted: #6b6b66;
+  --line: #e2e1dc;
+  --card: #fff;
+  --edge: #ecebe7;
+}
+
+.window {
+  overflow: hidden;
+  border-radius: var(--r-l);
+  background: var(--bg);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    0 18px 40px -18px rgba(0, 0, 0, 0.8);
+  color: var(--ink);
+  font-family: system-ui, sans-serif;
+  user-select: none;
+  transition:
+    background-color 400ms var(--ease-out),
+    color 400ms var(--ease-out);
+}
+
+.chrome {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 10px;
+  background: var(--chrome);
+  transition: background-color 400ms var(--ease-out);
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+}
+
+.dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dot);
+}
+
+.url {
+  position: absolute;
+  left: 50%;
+  max-width: 50%;
+  overflow: hidden;
+  padding: 3px 12px;
+  border-radius: var(--r-pill);
+  background: var(--url-bg);
+  color: var(--url-ink);
+  font-size: 10px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  translate: -50% 0;
+}
+
+.site {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 14px 18px 18px;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 10px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+
+.mark {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  background: var(--p);
+  color: var(--p-ink);
+  font-size: 11px;
+  font-weight: 800;
+  transition:
+    background-color 400ms var(--ease-out),
+    color 400ms var(--ease-out);
+}
+
+.brandName {
+  overflow: hidden;
+  max-width: 140px;
+  font-size: 12px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.links {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin-left: auto;
+  overflow: hidden;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.navCta {
+  flex: none;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--p);
+  color: var(--p-ink);
+  font-weight: 700;
+  transition:
+    background-color 400ms var(--ease-out),
+    color 400ms var(--ease-out);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  align-items: center;
+  gap: 18px;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.eyebrow {
+  width: 64px;
+  height: 7px;
+  border-radius: 4px;
+  background: var(--a);
+  opacity: 0.6;
+  transition: background-color 400ms var(--ease-out);
+}
+
+.headline {
+  overflow: hidden;
+  font-size: 26px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.line {
+  width: 88%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.buttons {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.primary,
+.secondary {
+  padding: 6px 11px;
+  border-radius: 7px;
+  transition:
+    background-color 400ms var(--ease-out),
+    color 400ms var(--ease-out),
+    box-shadow 400ms var(--ease-out);
+}
+
+.primary {
+  background: var(--p);
+  color: var(--p-ink);
+}
+
+.secondary {
+  box-shadow: inset 0 0 0 1.5px var(--s);
+  color: var(--ink);
+}
+
+.art {
+  position: relative;
+  height: 110px;
+  overflow: hidden;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--s) 22%, var(--bg));
+  transition: background-color 400ms var(--ease-out);
+}
+
+.blobA,
+.blobB {
+  position: absolute;
+  border-radius: 50%;
+  transition: background-color 400ms var(--ease-out);
+}
+
+.blobA {
+  right: -18px;
+  bottom: -26px;
+  width: 110px;
+  height: 110px;
+  background: var(--s);
+}
+
+.blobB {
+  top: 16px;
+  left: 18px;
+  width: 38px;
+  height: 38px;
+  background: var(--a);
+  opacity: 0.85;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--card);
+  box-shadow: 0 0 0 1px var(--edge);
+  transition: background-color 400ms var(--ease-out);
+}
+
+.cardIcon {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 2px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--p) 18%, var(--card));
+  transition: background-color 400ms var(--ease-out);
+}
+
+.product {
+  height: 42px;
+  margin-bottom: 2px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--s) 25%, var(--card));
+  transition: background-color 400ms var(--ease-out);
+}
+
+.cardLine {
+  width: 90%;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line);
+}
+
+.price {
+  width: 30%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--p);
+  transition: background-color 400ms var(--ease-out);
+}
+
+.caption {
+  color: var(--text-faint);
+  font-size: 12.5px;
+}
+
+/* Dark / light switch: a small segmented control */
+.themes {
+  display: inline-flex;
+  flex: none;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-m);
+  background: var(--sunken);
+  box-shadow: var(--outline-soft);
+}
+
+.theme {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 7px;
+  color: var(--text-faint);
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color var(--t-fade) var(--ease-out),
+    color var(--t-fade) var(--ease-out);
+}
+
+.theme:hover {
+  color: var(--text);
+}
+
+.themeOn,
+.themeOn:hover {
+  background: var(--float);
+  box-shadow: var(--outline-soft);
+  color: var(--text);
+}
+
+.theme:has(:focus-visible) {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.hiddenInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 560px) {
+  .links {
+    display: none;
+  }
+
+  .headline {
+    font-size: 20px;
+  }
+
+  .art {
+    height: 86px;
+  }
+}

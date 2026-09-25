@@ -50,19 +50,46 @@
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   width: 100%;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.cardLabel {
+  color: var(--text-faint);
+  font-size: 13px;
+  font-weight: 600;
 }
 
-.row {
+.asks {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: -8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.asks li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.num {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--raise-2);
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .actions {
@@ -70,34 +97,13 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 16px;
+  padding-top: 20px;
+  border-top: var(--hairline);
 }
 
 .fine {
   color: var(--text-faint);
   font-size: 13px;
-}
-
-.done {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 14px;
-  padding: 12px 0;
-}
-
-.doneIcon {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--tint-strong);
-  color: var(--accent);
-}
-
-.doneTitle {
-  font-size: 22px;
-  letter-spacing: -0.02em;
 }
 
 @media (max-width: 900px) {
@@ -111,8 +117,3 @@
   }
 }
 
-@media (max-width: 600px) {
-  .row {
-    grid-template-columns: 1fr;
-  }
-}

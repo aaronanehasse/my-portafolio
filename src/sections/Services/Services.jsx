@@ -83,7 +83,7 @@ export default function Services() {
 
       <div className={styles.cta}>
         <p className={styles.ctaText}>Not sure which fits? Tell me what you’re building.</p>
-        <Button size="l" href="#contact">
+        <Button size="l" href="/contact">
           Start a project
         </Button>
       </div>

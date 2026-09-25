@@ -59,7 +59,7 @@ export default function WebsitesPage() {
               ))}
             </ul>
             <div className={styles.actions}>
-              <Button size="l" href="#request">
+              <Button size="l" href="/contact?type=website&preview=1">
                 Request a free preview <ArrowRight size={18} aria-hidden="true" />
               </Button>
               <Button variant="secondary" size="l" href="/#projects">

@@ -345,6 +345,8 @@ function Dashboard() {
     const app = ref.current
     if (!app) return undefined
     const ro = new ResizeObserver(() => {
+      // Leaving the page (an in-app navigation) can fire this once more, after the chart is gone
+      if (!app.isConnected || !chartRef.current) return
       // Layout offsets rather than screen rects: the dashboard is tilted in
       // 3D, and the cursor lives inside it, in its untilted coordinates
       const rel = (el) => {

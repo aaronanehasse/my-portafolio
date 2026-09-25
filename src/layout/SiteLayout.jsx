@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
 import { Button } from '../components'
+import { usePageFade } from '../lib/router.jsx'
 import styles from './SiteLayout.module.css'
 
 /**
  * Header, main column and footer shared by every page. On the home page the
  * nav links are in-page anchors; elsewhere they point back to the home page's
- * sections.
+ * sections. Contact is its own page (/contact); `current` marks the page you're on.
  */
-export default function SiteLayout({ home = false, children }) {
+export default function SiteLayout({ home = false, current, children }) {
   const [scrolled, setScrolled] = useState(false)
+  // The header stays put between pages; everything under it fades
+  const fade = usePageFade()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 0)
@@ -28,13 +31,15 @@ export default function SiteLayout({ home = false, children }) {
         <nav className={styles.nav}>
           <Button variant="ghost" size="s" href={to('projects')}>Projects</Button>
           <Button variant="ghost" size="s" href={to('services')}>Services</Button>
-          <Button variant="ghost" size="s" href={to('contact')}>Contact</Button>
+          <Button variant="ghost" size="s" href="/contact" aria-current={current === 'contact' ? 'page' : undefined}>
+            Contact
+          </Button>
         </nav>
       </header>
 
-      <main className={styles.main}>{children}</main>
+      <main className={`${styles.main} ${fade}`}>{children}</main>
 
-      <footer className={styles.footer}>
+      <footer className={`${styles.footer} ${fade}`}>
         © {new Date().getFullYear()} Aaron Anehasse
       </footer>
     </div>
