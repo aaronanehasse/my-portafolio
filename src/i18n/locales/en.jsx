@@ -499,8 +499,11 @@ export default {
           address: 'Address',
           email: 'Email',
           vat: 'VAT number',
+          phone: 'Phone',
+          register: 'Register',
         },
         form: 'Private limited company (osaühing) under Estonian law',
+        register: 'Estonian Commercial Register (Äriregister), registry code {code}',
         sections: [
           {
             title: 'About the content',
@@ -577,6 +580,13 @@ export default {
             title: 'How long it’s kept',
             body: [
               'Requests that don’t lead to a project are deleted within 12 months. If we work together, I keep what’s needed for the project for as long as it runs, and invoices and related records for as long as accounting and tax law requires (7 years in Estonia).',
+            ],
+          },
+          {
+            title: 'Security',
+            body: [
+              'The whole site is served only over an encrypted HTTPS (TLS) connection, so everything between your browser and the site, including what you send through the contact form, is encrypted in transit.',
+              'Beyond that, I take appropriate technical and organisational measures to protect your data (GDPR Art. 32): access to requests is limited to me, and I only use providers that apply recognised security standards.',
             ],
           },
           {

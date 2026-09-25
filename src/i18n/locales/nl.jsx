@@ -489,8 +489,11 @@ export default {
           address: 'Adres',
           email: 'E-mail',
           vat: 'Btw-nummer',
+          phone: 'Telefoon',
+          register: 'Register',
         },
         form: 'Besloten vennootschap (osaühing) naar Ests recht',
+        register: 'Ests handelsregister (Äriregister), registratienummer {code}',
         sections: [
           {
             title: 'Over de inhoud',
@@ -567,6 +570,13 @@ export default {
             title: 'Hoe lang het bewaard wordt',
             body: [
               'Aanvragen die niet tot een project leiden, worden binnen 12 maanden verwijderd. Als we samenwerken, bewaar ik wat nodig is voor het project zolang het loopt, en facturen en bijbehorende stukken zolang de boekhoud- en belastingwetgeving dat vereist (7 jaar in Estland).',
+            ],
+          },
+          {
+            title: 'Beveiliging',
+            body: [
+              'De hele site wordt alleen via een versleutelde HTTPS-verbinding (TLS) aangeboden, dus alles tussen je browser en de site, ook wat je via het contactformulier stuurt, is onderweg versleuteld.',
+              'Daarnaast neem ik passende technische en organisatorische maatregelen om je gegevens te beschermen (AVG art. 32): alleen ik heb toegang tot aanvragen, en ik werk alleen met leveranciers die erkende beveiligingsnormen toepassen.',
             ],
           },
           {

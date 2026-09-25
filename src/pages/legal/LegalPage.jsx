@@ -25,18 +25,26 @@ export default function LegalPage({ doc }) {
 
         {doc === 'imprint' && (
           <dl className={styles.details}>
-            {details.map(([key, value]) => (
-              <div key={key} className={styles.row}>
-                <dt>{t(`legal.imprint.labels.${key}`)}</dt>
-                <dd>
-                  {key === 'email'
-                    ? email
-                    : Array.isArray(value)
-                      ? value.map((line) => <span key={line}>{line}</span>)
-                      : value}
-                </dd>
-              </div>
-            ))}
+            {details
+              .filter(([, value]) => value)
+              .map(([key, value]) => (
+                <div key={key} className={styles.row}>
+                  <dt>{t(`legal.imprint.labels.${key}`)}</dt>
+                  <dd>
+                    {key === 'email' ? (
+                      email
+                    ) : key === 'phone' ? (
+                      <a href={`tel:${value.replace(/\s/g, '')}`}>{value}</a>
+                    ) : key === 'register' ? (
+                      t('legal.imprint.register', { code: value })
+                    ) : Array.isArray(value) ? (
+                      value.map((line) => <span key={line}>{line}</span>)
+                    ) : (
+                      value
+                    )}
+                  </dd>
+                </div>
+              ))}
             <div className={styles.row}>
               <dt>{t('legal.imprint.labels.form')}</dt>
               <dd>{t('legal.imprint.form')}</dd>
