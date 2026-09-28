@@ -92,8 +92,8 @@ export default {
 
     work: {
       title: 'Selected work',
-      intro: 'Most of my work is private and protected, but here’s what I can share: two products I designed and built from the ground up.',
-      founder: 'Founder',
+      intro: 'Most of my work is private and protected, but here’s what I can share: two products of my own, designed and built from the ground up, and a site for an artist.',
+      roles: { founder: 'Founder', client: 'Client' },
       visit: 'Visit {site}',
       logo: '{name} logo',
       products: {
@@ -108,6 +108,12 @@ export default {
           tagline: 'The Minecraft marketplace.',
           description: 'A community-driven marketplace where server owners and builders buy and sell plugins, models, datapacks and tools, with creator studios, a server directory and forums.',
           stats: ['Listings', 'Creators', 'Sales'],
+        },
+        diyoung: {
+          kind: 'Artist website',
+          tagline: 'The home of Pixel Pig.',
+          description: 'A game-like website for Di Young, the creator of Pixel Pig, full of pixel-art details and animation. It holds his full catalogue of songs with previews and collections, and he can add and manage releases himself.',
+          stats: ['Song streams', 'YouTube subscribers'],
         },
       },
     },

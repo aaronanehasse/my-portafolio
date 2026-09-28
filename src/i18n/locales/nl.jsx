@@ -91,8 +91,8 @@ export default {
 
     work: {
       title: 'Uitgelicht werk',
-      intro: 'Het meeste van mijn werk is privé en afgeschermd, maar dit kan ik laten zien: twee producten die ik van de grond af heb ontworpen en gebouwd.',
-      founder: 'Oprichter',
+      intro: 'Het meeste van mijn werk is privé en afgeschermd, maar dit kan ik laten zien: twee eigen producten, van de grond af ontworpen en gebouwd, en een site voor een artiest.',
+      roles: { founder: 'Oprichter', client: 'Klant' },
       visit: 'Bezoek {site}',
       logo: 'Logo van {name}',
       products: {
@@ -107,6 +107,12 @@ export default {
           tagline: 'Dé Minecraft-marktplaats.',
           description: 'Een marktplaats van en voor de community, waar serverbeheerders en bouwers plugins, modellen, datapacks en tools kopen en verkopen, met studio’s voor makers, een servergids en forums.',
           stats: ['Producten', 'Makers', 'Verkopen'],
+        },
+        diyoung: {
+          kind: 'Website voor een artiest',
+          tagline: 'Het thuis van Pixel Pig.',
+          description: 'Een website als een game voor Di Young, de maker van Pixel Pig, vol pixel-art details en animaties. Met zijn volledige catalogus aan nummers, previews en collecties, en hij kan zelf releases toevoegen en beheren.',
+          stats: ['Streams van zijn nummers', 'Abonnees op YouTube'],
         },
       },
     },

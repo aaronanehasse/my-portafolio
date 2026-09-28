@@ -1,7 +1,7 @@
 import { ArrowUpRight } from 'lucide-react'
 import { Button, Tag } from '../../components'
 import { useT } from '../../i18n/index.jsx'
-import { CrateScene, LodeScene } from './scenes.jsx'
+import { CrateScene, DiYoungScene, LodeScene } from './scenes.jsx'
 import styles from './Work.module.css'
 
 /*
@@ -10,6 +10,8 @@ import styles from './Work.module.css'
  *
  * The words (kind, tagline, description, stat labels) are in the language
  * files under work.products.<id>; stat values here line up with their labels.
+ * `role` is the tag by the name, a key under work.roles. `outlined` draws the
+ * stage's edge over the scene, for a scene that paints the page's own black.
  */
 
 const products = [
@@ -30,6 +32,17 @@ const products = [
     stats: ['100+', '80+', '80+'],
     href: 'https://nmcrate.net',
     Scene: CrateScene,
+  },
+  {
+    id: 'diyoung',
+    name: 'Di Young',
+    color: '#2863b4',
+    logo: '/work/diyoung.svg',
+    role: 'client',
+    outlined: true,
+    stats: ['50M+', '140k+'],
+    href: 'https://www.diyoung.me',
+    Scene: DiYoungScene,
   },
 ]
 
@@ -52,7 +65,7 @@ export default function Work() {
         <p className={styles.intro}>{t('work.intro')}</p>
       </div>
 
-      {products.map(({ id, name, color, logo, stats, href, Scene }, i) => {
+      {products.map(({ id, name, color, logo, role = 'founder', outlined, stats, href, Scene }, i) => {
         const { kind, tagline, description, stats: statLabels } = t(`work.products.${id}`)
         return (
           <article
@@ -68,7 +81,7 @@ export default function Work() {
                   <h3 className={styles.name}>{name}</h3>
                   <span className={styles.kind}>{kind}</span>
                 </div>
-                <Tag variant="accent" className={styles.role}>{t('work.founder')}</Tag>
+                <Tag variant="accent" className={styles.role}>{t(`work.roles.${role}`)}</Tag>
               </div>
               <p className={styles.tagline}>{tagline}</p>
               <p className={styles.description}>{description}</p>
@@ -82,13 +95,13 @@ export default function Work() {
               </dl>
               <div>
                 <Button variant="secondary" href={href} target="_blank" rel="noreferrer">
-                  {t('work.visit', { site: href.replace('https://', '') })}
+                  {t('work.visit', { site: href.replace(/^https:\/\/(www\.)?/, '') })}
                   <ArrowUpRight size={16} aria-hidden="true" />
                 </Button>
               </div>
             </div>
 
-            <div className={styles.stage}>
+            <div className={`${styles.stage} ${outlined ? styles.stageOutlined : ''}`}>
               <Scene />
             </div>
           </article>

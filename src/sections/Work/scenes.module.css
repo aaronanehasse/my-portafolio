@@ -33,10 +33,6 @@
 .accentSoft {
   fill: color-mix(in srgb, var(--accent) 70%, black);
 }
-.dot {
-  fill: rgba(255, 255, 255, 0.12);
-}
-
 .ripple {
   fill: none;
   stroke: var(--accent);
@@ -57,73 +53,53 @@
   font: 500 9px system-ui, sans-serif;
 }
 
-.label {
-  fill: var(--text-faint);
-  font: 600 7.5px system-ui, sans-serif;
-  letter-spacing: 0.08em;
-}
-
-.brandText {
-  fill: var(--text);
-  font: 650 11px system-ui, sans-serif;
-}
-
 /* ---- Lode Studio ---- */
 
-.field {
-  fill: var(--raise-2);
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 1;
+/* The block: stone, shaded per face by laying black over it */
+.stoneFace {
+  fill: #858a8f;
 }
 
-.fieldLabel {
-  fill: var(--text-faint);
-  font: 500 8.5px system-ui, sans-serif;
-}
-
-.fieldValue {
-  fill: var(--text);
-  font: 600 8.5px ui-monospace, 'Cascadia Code', Consolas, monospace;
-}
-
-.swatchRing {
-  fill: none;
-  stroke: var(--text);
-  stroke-width: 1.5;
-}
-
-.btnText {
-  fill: var(--accent-ink);
-  font: 650 10px system-ui, sans-serif;
-}
-
-.check {
-  color: var(--accent-ink);
-}
-
-/* Voxel faces: stone, optionally painted, then shaded by which way it faces */
-.stone {
-  fill: #3b3f43;
-  stroke: var(--sunken);
-  stroke-width: 0.6;
-  stroke-linejoin: round;
-}
-.accentFace {
-  fill: var(--accent);
-}
 .shadow {
   fill: #000;
 }
 
+/* The Add Module menu floats over the editor, one step up the ladder */
+.menu {
+  fill: var(--float);
+  stroke: rgba(255, 255, 255, 0.1);
+  stroke-width: 1;
+}
+
 /* ---- NMCrate ---- */
+
+/* Inputs, buttons and panels on its pages: raise-1 with the hairline */
+.input,
+.panel {
+  fill: var(--raise-1);
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 1;
+}
+
+/* Its listing cards carry a thin accent edge, as on the site */
+.listing {
+  fill: var(--raise-1);
+  stroke: color-mix(in srgb, var(--accent) 40%, transparent);
+  stroke-width: 1;
+}
+
+.listingHover {
+  fill: var(--raise-2);
+  stroke: var(--accent);
+  stroke-width: 1;
+}
+
+.addIcon {
+  color: var(--accent);
+}
 
 .cartIcon {
   color: var(--text-muted);
-}
-
-
-.badgeCheck {
-  color: var(--accent-ink);
 }
 
 .badgeText {
@@ -131,76 +107,11 @@
   font: 700 8px system-ui, sans-serif;
 }
 
-.pillText {
-  fill: var(--text-faint);
-  font: 500 9px system-ui, sans-serif;
-}
-
-.pillActive {
-  fill: var(--accent);
-  font: 600 9px system-ui, sans-serif;
-}
-
-/* Listing cards: small raised items — raise-1 plus the hairline */
+/* A small raised bar: raise-1 plus the hairline */
 .card {
   fill: var(--raise-1);
   stroke: rgba(255, 255, 255, 0.08);
   stroke-width: 1;
-}
-
-/* Hover moves exactly one step up the ladder */
-.cardHover {
-  fill: var(--raise-2);
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 1;
-}
-
-.price {
-  fill: var(--text);
-  font: 650 10px ui-monospace, 'Cascadia Code', Consolas, monospace;
-}
-
-.priceFree {
-  fill: var(--accent);
-  font: 650 10px ui-monospace, 'Cascadia Code', Consolas, monospace;
-}
-
-.plus {
-  color: var(--accent-ink);
-}
-
-.toast {
-  fill: var(--float);
-  stroke: rgba(255, 255, 255, 0.08);
-  stroke-width: 1;
-}
-
-.toastIcon {
-  color: var(--accent);
-}
-
-.toastTitle {
-  fill: var(--text);
-  font: 600 10px system-ui, sans-serif;
-}
-
-.toastSub {
-  fill: var(--text-faint);
-  font: 500 8.5px system-ui, sans-serif;
-}
-
-.toastValue {
-  fill: var(--accent);
-  font: 700 11px ui-monospace, 'Cascadia Code', Consolas, monospace;
-  font-variant-numeric: tabular-nums;
-}
-
-.spark {
-  fill: none;
-  stroke: var(--accent);
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 /* ---- NDA document ---- */
