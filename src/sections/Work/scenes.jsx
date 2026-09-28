@@ -678,11 +678,9 @@ export function CrateArt({ ref, t, clock }) {
             <rect className={s.tint} x="290" y="179" width="36" height="16" rx="3" stroke="var(--accent)" />
             <Line x={298} y={185} w={20} h={4} fill="var(--accent)" />
           </g>
-          {/* The mascot: a floating voxel figure */}
+          {/* The mascot: a floating voxel figure, just its head and body */}
           <g {...pop(1.0)}>
             <g transform={`translate(0 ${bob})`}>
-              {/* A wing off the back of the body, stepping up and out */}
-              <path d="M229 229h6v11h-6z M223 225h6v13h-6z M217 221h6v12h-6z M212 219h5v8h-5z" className={s.accent} opacity="0.4" />
               <rect x="231" y="206" width="22" height="22" rx="2" className={s.accent} />
               <rect x="247" y="206" width="6" height="22" className={s.accentSoft} />
               <rect x="236" y="213" width="3" height="7" fill="#fff" />
